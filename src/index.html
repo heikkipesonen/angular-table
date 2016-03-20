@@ -25,8 +25,15 @@
     <![endif]-->
 
 <div ng-controller="MainController">
-
-  <h-data-table options="table"></h-table>
+<select ng-model="table.itemsPerPage">
+  <option value="10">10</option>
+  <option value="20">20</option>
+  <option value="30">30</option>
+  <option value="40">40</option>
+  <option value="50">50</option>
+</select>
+<input type="text" ng-model="page">
+  <h-data-table options="table" page="page"></h-table>
 </div>
 
 

@@ -1,20 +1,39 @@
 const BASE_TEMPLATE = `
   <tr class="h-table-details-row">
-    <td class="h-table-details-cell" colspan="999">
-    {{content}}
+    <td colspan="999">
+      <div class="h-table-details-wrapper">
+        {{content}}
+      </div>
     </td>
-  </tr>`;
+  <tr>`;
 
 export class TableDetailViewService{
 
-  constructor($rootScope, $compile, $animate, $q){
+  constructor($rootScope, $compile, $animate, $controller, $q){
       'ngInject';
       this.$rootScope = $rootScope;
       this.$compile = $compile;
       this.$animate = $animate;
+      this.$controller = $controller;
       this.$q = $q;
 
+      console.log($controller);
+
       this.visibleViews = [];
+  }
+
+  closeAll(){
+    this.visibleViews.forEach((view) => {
+        view.$$scope.close();
+    });
+  }
+
+  isViewOpen(rowElement){
+    return this.visibleViews.indexOf(rowElement) > -1;
+  }
+
+  closeView(rowElement) {
+    rowElement.$$scope.close();
   }
 
   showDetails(data, rowElement, template, inject) {
@@ -24,6 +43,8 @@ export class TableDetailViewService{
 
     let scope = this.$rootScope.$new();
         scope.data = data;
+        scope.close = function () { scope.deferred.reject() };
+        scope.complete = function () { scope.deferred.accept() };
         scope.deferred = this.$q.defer();
 
     let element = this.$compile(BASE_TEMPLATE.replace('{{content}}', template))(scope);
@@ -31,9 +52,13 @@ export class TableDetailViewService{
     this.$animate.enter(element, rowElement.parentNode, rowElement);
     this.visibleViews.push(rowElement);
 
+    rowElement.$$deferred = scope.deferred;
+    rowElement.$$scope = scope;
+
     scope.deferred.promise.finally(()=>{
+
       this.$animate.leave(element).then(()=>{
-        scope.$destroy();
+        this.visibleViews.splice(this.visibleViews.indexOf(rowElement), 1);
       });
     });
 
@@ -42,7 +67,6 @@ export class TableDetailViewService{
     })
 
     element.on('$destroy', () => {
-      this.visibleViews.splice(this.visibleViews.indexOf(rowElement), 1);
       scope.$destroy();
     });
 

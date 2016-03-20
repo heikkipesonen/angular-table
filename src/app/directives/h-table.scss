@@ -10,9 +10,15 @@ $table-header-border: rgb(200, 200, 200) !default;
 $table-row-striped: rgba(0,0,0,0.05) !default;
 $table-loading-gradient-start: #1a5bec !default;
 $table-loading-gradient-end: lighten($table-loading-gradient-start, 30) !default;
+$table-details-background: rgb(255, 255, 255) !default;
+
+.data-table-container{
+  margin: 50px;
+}
 
 .data-table-wrapper{
-
+  margin: auto;
+  max-width: 1000px;
 }
 
 .h-data-table{
@@ -68,6 +74,19 @@ $table-loading-gradient-end: lighten($table-loading-gradient-start, 30) !default
     width: $table-row-icon-size;
 
     font-size: $table-button-size*0.5;
+    cursor: pointer;
+
+    &:hover{
+      opacity: 0.5;
+    }
+  }
+
+
+  .h-table-header-row{
+    position: relative;
+    z-index: 20;
+    border-bottom: 1px solid $table-header-border;
+    // box-shadow: 0px 20px 50px -30px rgba(0, 0, 0, 0.3);
   }
 
   .h-table-header-row th{
@@ -76,8 +95,6 @@ $table-loading-gradient-end: lighten($table-loading-gradient-start, 30) !default
     text-align: left;
     text-transform: capitalize;
     vertical-align: bottom;
-
-    border-bottom: 1px solid $table-header-border;
   }
 
   tr:not(:last-of-type) td{
@@ -162,42 +179,38 @@ $table-loading-gradient-end: lighten($table-loading-gradient-start, 30) !default
   // }
 }
 
-.h-page-select{
-  padding: 0;
-  text-align: center;
-  white-space: nowrap;
-  overflow: hidden;
-  position: relative;
-  vertical-align: middle;
+.h-table-details-row{
 
-  .h-page-select-wrapper{
-    overflow-x: scroll;
-    overflow-y: hidden;
-    -webkit-overflow-scrolling: touch;
-    padding: $grid-gutter-width/2;
+  td{
+    padding: 0;
   }
 
+  .h-table-details-wrapper{
+    box-sizing: border-box;
+    background-color: $table-details-background;
+    border-bottom: 1px solid $table-border-color;
+    height: 200px;
+  }
 
-  .h-page-selector{
-    font-size: 10pt;
-    cursor: pointer;
-    display: inline-block;
-    text-align: center;
-    width: $table-page-button-size;
-    height: $table-page-button-size;
-    line-height: $table-page-button-size;
+  &.ng-animate, &.ng-animate .h-table-details-wrapper{
+    transition: 0.3s;
+    transition-timing-function: ease-out;
+    overflow: hidden;
+  }
 
-    border-radius: 50%;
-    border: 1px solid $table-border-color;
+  &.ng-enter .h-table-details-wrapper{
+    max-height: 0;
+  }
 
-    &:not(:first-child){
-      margin-left: $grid-gutter-width/2
-    }
+  &.ng-enter-active .h-table-details-wrapper{
+    max-height: 200px;
+  }
 
-    &.h-page-selector-active{
-      color: rgba(40, 61, 255, 0.73);
-      border-color: rgba(40, 61, 255, 0.73);
-      background-color: rgba(91, 220, 255, 0.19);
-    }
+  &.ng-leave .h-table-details-wrapper{
+    max-height: 200px;
+  }
+
+  &.ng-leave-active .h-table-details-wrapper{
+    max-height: 0;
   }
 }

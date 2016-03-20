@@ -10,6 +10,7 @@ import {TableHeaderDirective} from './directives/table-header';
 import {DataTableHeaderCellDirective} from './directives/table-header';
 import {DataTableHeaderRowDirective} from './directives/table-header';
 import {TableDetailViewService} from './directives/table-detail-view';
+import {TablePageSelect} from './directives/table-page-select';
 import * as extra from './directives/table-extra';
 import data from './directives/data';
 
@@ -27,7 +28,7 @@ angular.module('hTable', ['ngAnimate', 'toastr'])
   .directive('hTableRowIcon', extra.TableRowIconDirective)
   .directive('hTableRowButton', extra.TableRowButtonDirective)
   .directive('hDataTableRowLoader', extra.TableRowLoaderDirective)
-  .directive('hTablePageSelect', extra.TablePageSelect)
+  .directive('hTablePageSelect', TablePageSelect)
 
 
   .directive('hDataTable', DataTableDirective)
@@ -42,8 +43,18 @@ angular.module('hTable', ['ngAnimate', 'toastr'])
 
     $scope.table = {
       data: data,
-      itemsPerPage: 13,
+      paged: true,
+      itemsPerPage: 10,
+      details: {
+        template: '<h2>kissa</h2>'
+      },
       columns:[
+        {
+          key: 'name',
+          label: 'Name',
+          classNames: 'col-lt-md-hide'
+        },
+
         {
           key: 'avilable',
           label:'Available',
@@ -54,18 +65,13 @@ angular.module('hTable', ['ngAnimate', 'toastr'])
           label: 'Category'
         },
         {
-          key: 'name',
-          label: 'Name',
-          classNames: 'col-lt-md-hide'
+          key: 'package_size',
+          label: 'Size'
         },
         {
           key: 'unit',
           label: 'unit',
           classNames: 'fit-content text-center'
-        },
-        {
-          key: 'package_size',
-          label: 'Size'
         },
         {
           key: 'package_price',

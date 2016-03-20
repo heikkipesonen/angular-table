@@ -3,9 +3,6 @@ export function TableDirective(){
     restrict: 'E',
     replace: true,
     transclude: true,
-    controller: () => {
-
-    },
     template: `
     <table class="h-data-table" ng-transclude></table>
     `
@@ -17,41 +14,109 @@ export class DataTableController {
     'ngInject';
 
     this.TableDetailViewService = TableDetailViewService;
+    this.rows = this.options.data;
 
-    this.rows = this.options.data.map((item)=> item);
 
+    /**
+     * watch data rows,
+     * items per page,
+     * and columns for change
+     *
+     * if change then rebuild all
+     * @param  {[type]} ( [description]
+     * @return {[type]}   [description]
+     */
+    $scope.$watch(()=>{
+      return {
+        data: this.options.data.length,
+        itemsPerPage: this.options.itemsPerPage,
+        columns: this.options.columns
+      };
+    }, () => this.update(), true);
+
+
+    /**
+     * watch selected page change
+     * only update view model offset
+     * @param  {[type]} ( [description]
+     * @return {[type]}   [description]
+     */
+    $scope.$watch(()=>{
+      return this.page;
+    }, () => {
+      this.setPage(parseInt(this.page) || 0);
+      this.TableDetailViewService.closeAll()
+    });
+  }
+
+  /**
+   * refresh pages model and set page index as data is
+   * changed
+   * @return {[type]} [description]
+   */
+  update(){
+    this.TableDetailViewService.closeAll();
     this.buildPages();
-    this.setPage();
+    this.setPage(this.page || 0);
   }
 
+  /**
+   * construct a list of page objects to track
+   * @return {[type]} [description]
+   */
   buildPages(){
-    this.pages = Array(Math.ceil(this.options.data.length / this.options.itemsPerPage))
-      .fill(0)
-      .map((item, index) => {
-        return {
-          page: index,
-          label: index + 1,
-          start: index * this.options.itemsPerPage,
-          end: index * this.options.itemsPerPage + this.options.itemsPerPage
-        };
-      });
+    if (this.options.paged){
+      this.pages = Array(Math.ceil(this.options.data.length / parseInt(this.options.itemsPerPage)))
+        .fill(0)
+        .map((item, index) => {
+          return {
+            page: index,
+            label: index + 1,
+            start: index * this.options.itemsPerPage
+          };
+        });
+    } else {
+      this.pages = [{
+        page: 0,
+        label: 0,
+        start: 0
+      }];
+    }
   }
 
-  setPage(page){
-    this.currentPage = page || this.pages[0];
+  /**
+   * set page to desired index
+   * @param {[type]} pageIndex [description]
+   */
+  setPage(pageIndex) {
+    pageIndex = pageIndex < 0 ? 0 : pageIndex < this.pages.length - 1 ? pageIndex : this.pages.length - 1;
+    this._currentPage = this.pages[pageIndex];
+    this.page = pageIndex;
   }
 
+  /**
+   * show extra information
+   * @param  {[type]} event [description]
+   * @param  {[type]} data  [description]
+   * @return {[type]}       [description]
+   */
   showDetails(event, data){
-    let targetRow = event.target;
+    if (this.options.details){
+      let targetRow = event.target;
 
-    while (targetRow.parentNode){
-      targetRow = targetRow.parentNode;
-      if (targetRow.tagName === 'TR'){
-        break;
+      while (targetRow.parentNode){
+        targetRow = targetRow.parentNode;
+        if (targetRow.tagName === 'TR'){
+          break;
+        }
+      }
+
+      if (this.TableDetailViewService.isViewOpen(targetRow)){
+        this.TableDetailViewService.closeView(targetRow);
+      } else {
+        this.TableDetailViewService.showDetails(data, targetRow, this.options.details.template);
       }
     }
-
-    this.TableDetailViewService.showDetails(data, targetRow, `<div ng-click="deferred.reject()">kissa {{data.name}}</div>`);
   }
 }
 
@@ -61,13 +126,15 @@ export function DataTableDirective(){
     restrict: 'E',
     replace: true,
     scope: {
+      page: '=?',
       options: '='
     },
     controller: DataTableController,
     bindToController: true,
     controllerAs: 'datatable',
     template: `
-    <div class="data-table-wrapper">
+    <div class="data-table-container">
+      <div class="data-table-wrapper">
       <h-table>
         <h-data-table-header>
 
@@ -98,7 +165,7 @@ export function DataTableDirective(){
             'h-row-even' : $even,
             'h-row-odd' : $odd
           }"
-          ng-repeat="row in datatable.rows | limitTo : datatable.options.itemsPerPage : datatable.currentPage.start">
+          ng-repeat="row in datatable.rows | limitTo : datatable.options.paged ? datatable.options.itemsPerPage : null : datatable._currentPage.start track by $index">
 
           <h-table-row-controls
             ng-if="datatable.options.controls.left"
@@ -121,10 +188,11 @@ export function DataTableDirective(){
 
         </h-data-table-row>
       </h-table>
+      </div>
       <h-table-page-select
-        current-page="datatable.currentPage"
-        pages="datatable.pages"
-        select="datatable.setPage(page)">
+        ng-if="datatable.options.paged"
+        page="datatable.page"
+        pages="datatable.pages">
       </h-table-page-select>
     </div>
     `

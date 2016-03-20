@@ -52,27 +52,3 @@ export function TableRowButtonDirective(){
     `
   };
 }
-
-export function TablePageSelect(){
-  return {
-    restrict: 'E',
-    replace: true,
-    scope: {
-      pages: '=',
-      currentPage: '=',
-      setPage: '&select'
-    },
-    template: `
-    <div class="h-page-select">
-        <div class="h-page-select-wrapper">
-          <div class="h-page-selector"
-            ng-class="{'h-page-selector-active' : pageSelector === currentPage}"
-            ng-repeat="pageSelector in pages"
-            ng-click="setPage({page: pageSelector})">
-            {{pageSelector.label}}
-          </div>
-        </div>
-    </div>
-    `
-  };
-}
