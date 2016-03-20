@@ -26,6 +26,7 @@ angular.module('hTable', ['ngAnimate', 'toastr'])
   .directive('hTableRowIcon', extra.TableRowIconDirective)
   .directive('hTableRowButton', extra.TableRowButtonDirective)
   .directive('hDataTableRowLoader', extra.TableRowLoaderDirective)
+  .directive('hTablePageSelect', extra.TablePageSelect)
 
 
   .directive('hDataTable', DataTableDirective)
