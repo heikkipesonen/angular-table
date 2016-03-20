@@ -17,8 +17,6 @@ $table-details-background: rgb(255, 255, 255) !default;
 }
 
 .data-table-wrapper{
-  margin: auto;
-  max-width: 1000px;
 }
 
 .h-data-table{
@@ -203,8 +201,11 @@ $table-details-background: rgb(255, 255, 255) !default;
   .h-table-details-wrapper{
     box-sizing: border-box;
     background-color: $table-details-background;
-    border-bottom: 1px solid $table-border-color;
     height: 200px;
+
+    &:not(:last-child){
+      border-bottom: 1px solid $table-border-color;
+    }
   }
 
   &.ng-animate, &.ng-animate .h-table-details-wrapper{
