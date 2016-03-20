@@ -179,6 +179,21 @@ $table-details-background: rgb(255, 255, 255) !default;
   // }
 }
 
+.h-table-filter-row{
+  td{
+    padding: 1px 0;
+  }
+
+  input{
+    border: none;
+    outline: none;
+    box-sizing: border-box;
+    padding: $grid-gutter-width/2;
+    margin: 0;
+    width: 100%;
+  }
+}
+
 .h-table-details-row{
 
   td{

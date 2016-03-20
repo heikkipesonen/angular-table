@@ -107,14 +107,14 @@ export class DataTableController {
       while (targetRow.parentNode){
         targetRow = targetRow.parentNode;
         if (targetRow.tagName === 'TR'){
+          if (this.TableDetailViewService.isViewOpen(targetRow)){
+            this.TableDetailViewService.closeView(targetRow);
+          } else {
+            this.TableDetailViewService.showDetails(data, targetRow, this.options.details.template);
+          }
+
           break;
         }
-      }
-
-      if (this.TableDetailViewService.isViewOpen(targetRow)){
-        this.TableDetailViewService.closeView(targetRow);
-      } else {
-        this.TableDetailViewService.showDetails(data, targetRow, this.options.details.template);
       }
     }
   }
@@ -159,6 +159,11 @@ export function DataTableDirective(){
 
         <h-data-table-row-loader></h-data-table-row-loader>
 
+
+        <h-data-table-filter-row
+          options="datatable.options">
+        </h-data-table-filter-row>
+
         <h-data-table-row
           ng-click="datatable.showDetails($event, row)"
           ng-class="{
@@ -177,7 +182,7 @@ export function DataTableDirective(){
             data-cell-label="{{column.label}}: "
             class="h-data-table-data-cell {{column.classNames || ''}}"
             ng-repeat="column in datatable.options.columns">
-              {{row[column.key]}}
+              {{column.valueFilter ? column.valueFilter(row[column.key]) : row[column.key]}}
           </h-table-cell>
 
           <h-table-row-controls

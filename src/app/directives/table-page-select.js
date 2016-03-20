@@ -7,7 +7,7 @@ export function TablePageSelect(){
       pages: '=',
       page: '=',
     },
-    controller: function PageSelctorController($scope){
+    controller: function PageSelectorController($scope){
       'ngInject';
       $scope.buttons = [];
       let updateVisibleButtons = () => {

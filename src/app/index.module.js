@@ -9,6 +9,7 @@ import {TableCellDirective} from './directives/table-cell';
 import {TableHeaderDirective} from './directives/table-header';
 import {DataTableHeaderCellDirective} from './directives/table-header';
 import {DataTableHeaderRowDirective} from './directives/table-header';
+import {DataTableFilterRowDirective} from './directives/table-header';
 import {TableDetailViewService} from './directives/table-detail-view';
 import {TablePageSelect} from './directives/table-page-select';
 import * as extra from './directives/table-extra';
@@ -35,6 +36,7 @@ angular.module('hTable', ['ngAnimate', 'toastr'])
   .directive('hDataTableRow', DataTableRowDirective)
   .directive('hDataTableHeader', DataTableHeaderRowDirective)
   .directive('hDataTableHeaderCell', DataTableHeaderCellDirective)
+  .directive('hDataTableFilterRow', DataTableFilterRowDirective)
 
   .service('TableDetailViewService', TableDetailViewService)
 
@@ -75,7 +77,11 @@ angular.module('hTable', ['ngAnimate', 'toastr'])
         },
         {
           key: 'package_price',
-          label: 'Price'
+          label: 'Price',
+          classNames: 'fit-content text-center',
+          valueFilter: (value) => {
+            return (value + '').replace('.',',');
+          }
         }
       ],
       controls: {
