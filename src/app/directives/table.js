@@ -182,7 +182,7 @@ export function DataTableDirective(){
             data-cell-label="{{column.label}}: "
             class="h-data-table-data-cell {{column.classNames || ''}}"
             ng-repeat="column in datatable.options.columns">
-              {{column.valueFilter ? column.valueFilter(row[column.key]) : row[column.key]}}
+              {{column.valueFilter ? column.valueFilter(row[column.key], row) : row[column.key]}}
           </h-table-cell>
 
           <h-table-row-controls

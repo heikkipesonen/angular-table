@@ -109,7 +109,17 @@ angular.module('hTable', ['ngAnimate'])
         },
         {
           key: 'package_size',
-          label: 'Size'
+          label: 'Size',
+          /**
+           * value filter
+           * manipulate model value for display
+           * @param  {[type]} value value of column key
+           * @param  {Object} row original row
+           * @return {[type]}       [description]
+           */
+          valueFilter: (value, row) => {
+            return value + row.unit;
+          }
         },
         {
           key: 'unit',

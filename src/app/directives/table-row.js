@@ -6,10 +6,7 @@ export function TableRowDirective(){
     template: `
     <tr class="table-row" ng-transclude></tr>
     `,
-    require: '^hTable',
-    link: ($scope, $element, $attrs, $controller) => {
-      console.log($controller);
-    }
+    require: '^hTable'
   }
 }
 
