@@ -9,7 +9,7 @@ export function TableRowControlsDirective(){
       <td class="h-table-row-controls">
         <h-table-row-icon
           ng-repeat="control in controls"
-          ng-click="control.onclick({$event: $event, row: row})">
+          ng-click="$event.stopPropagation(); control.onclick({$event: $event, row: row})">
             <i class="{{control.icon}}"></i>
           </h-table-row-icon>
       </td>
@@ -63,20 +63,16 @@ export function TablePageSelect(){
       setPage: '&select'
     },
     template: `
-    <tr class="h-page-select">
-      <td colspan="999">
+    <div class="h-page-select">
         <div class="h-page-select-wrapper">
-          <div class="h-page-select-scroll">
-            <div class="h-page-select"
-              ng-class="{'h-page-selector-active' : pageSelector === currentPage}"
-              ng-repeat="pageSelector in pages"
-              ng-click="setPage({page: pageSelector})">
-              {{pageSelector.label}}
-            </div>
+          <div class="h-page-selector"
+            ng-class="{'h-page-selector-active' : pageSelector === currentPage}"
+            ng-repeat="pageSelector in pages"
+            ng-click="setPage({page: pageSelector})">
+            {{pageSelector.label}}
           </div>
         </div>
-      </td>
-    </tr>
+    </div>
     `
   };
 }

@@ -13,8 +13,13 @@ export function TableDirective(){
 }
 
 export class DataTableController {
-  constructor($scope){
+  constructor($scope, TableDetailViewService){
     'ngInject';
+
+    this.TableDetailViewService = TableDetailViewService;
+
+    this.rows = this.options.data.map((item)=> item);
+
     this.buildPages();
     this.setPage();
   }
@@ -34,6 +39,19 @@ export class DataTableController {
 
   setPage(page){
     this.currentPage = page || this.pages[0];
+  }
+
+  showDetails(event, data){
+    let targetRow = event.target;
+
+    while (targetRow.parentNode){
+      targetRow = targetRow.parentNode;
+      if (targetRow.tagName === 'TR'){
+        break;
+      }
+    }
+
+    this.TableDetailViewService.showDetails(data, targetRow, `<div ng-click="deferred.reject()">kissa {{data.name}}</div>`);
   }
 }
 
@@ -75,11 +93,12 @@ export function DataTableDirective(){
         <h-data-table-row-loader></h-data-table-row-loader>
 
         <h-data-table-row
+          ng-click="datatable.showDetails($event, row)"
           ng-class="{
             'h-row-even' : $even,
             'h-row-odd' : $odd
           }"
-          ng-repeat="row in datatable.options.data | limitTo : datatable.options.itemsPerPage : datatable.currentPage.start track by $index">
+          ng-repeat="row in datatable.rows | limitTo : datatable.options.itemsPerPage : datatable.currentPage.start">
 
           <h-table-row-controls
             ng-if="datatable.options.controls.left"
@@ -101,13 +120,12 @@ export function DataTableDirective(){
           </h-table-row-controls>
 
         </h-data-table-row>
-
-        <h-table-page-select
-          current-page="datatable.currentPage"
-          pages="datatable.pages"
-          select="datatable.setPage(page)"></h-table-page-select>
-
       </h-table>
+      <h-table-page-select
+        current-page="datatable.currentPage"
+        pages="datatable.pages"
+        select="datatable.setPage(page)">
+      </h-table-page-select>
     </div>
     `
   }

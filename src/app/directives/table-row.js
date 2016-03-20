@@ -19,10 +19,8 @@ export function DataTableRowDirective(){
     replace: true,
     transclude: true,
     template: `
-    <tr class="table-row" ng-transclude></tr>
+      <tr class="table-row" ng-transclude></tr>
     `,
-    require: '^hDataTable',
-    link: ($scope, $element, $attrs, $controller) => {
-    }
+    require: '^hDataTable'
   }
 }

@@ -3,6 +3,7 @@ $table-border-color: rgb(226, 223, 223) !default;
 $grid-gutter-width: 16px !default;
 $table-row-icon-size: 42px !default;
 $table-button-size: 42px !default;
+$table-page-button-size: 32px !default;
 $table-header-height: 50px !default;
 $table-breakpoint: 600px !default;
 $table-header-border: rgb(200, 200, 200) !default;
@@ -66,7 +67,7 @@ $table-loading-gradient-end: lighten($table-loading-gradient-start, 30) !default
     height: $table-button-size;
     width: $table-row-icon-size;
 
-    font-size: $table-button-size*0.65;
+    font-size: $table-button-size*0.5;
   }
 
   .h-table-header-row th{
@@ -97,9 +98,9 @@ $table-loading-gradient-end: lighten($table-loading-gradient-start, 30) !default
 
   tr.h-data-table-loader td{
     padding: 0;
-    height: 8px;
+    height: 0px;
     border: none !important;
-    // display: none;
+    display: none;
 
     background: -webkit-linear-gradient(left , $table-loading-gradient-start 30%, $table-loading-gradient-end 80%, $table-loading-gradient-start 100%) repeat;
     background-size: 200% 100%;
@@ -118,54 +119,7 @@ $table-loading-gradient-end: lighten($table-loading-gradient-start, 30) !default
     }
    }
 
-  tr.h-page-select>td{
-    padding: 0;
-    text-align: center;
-    white-space: nowrap;
-    overflow: hidden;
-    position: relative;
-    height: $table-button-size + 30px;
-    vertical-align: middle;
 
-    .h-page-select-wrapper{
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      overflow-x: scroll;
-      overflow-y: hidden;
-
-      display: flex;
-      align-items: center;
-    }
-
-    .h-page-select-scroll{
-      padding: 0 $grid-gutter-width/2;
-    }
-
-    .h-page-select{
-      cursor: pointer;
-      display: inline-block;
-      text-align: center;
-      min-width: $table-button-size;
-      min-height: $table-button-size;
-      line-height: $table-button-size;
-
-      border-radius: 50%;
-      border: 1px solid $table-border-color;
-
-      &:not(:first-child){
-        margin-left: $grid-gutter-width/2
-      }
-
-      &.h-page-selector-active{
-        color: rgba(40, 61, 255, 0.73);
-        border-color: rgba(40, 61, 255, 0.73);
-        background-color: rgba(91, 220, 255, 0.19);
-      }
-    }
-  }
   //
   // @media (max-width: $table-breakpoint){
   //   td.table-row-controls, th.table-row-controls{
@@ -206,5 +160,44 @@ $table-loading-gradient-end: lighten($table-loading-gradient-start, 30) !default
   //     border-bottom: 1px solid $table-border-color;
   //   }
   // }
+}
 
+.h-page-select{
+  padding: 0;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  position: relative;
+  vertical-align: middle;
+
+  .h-page-select-wrapper{
+    overflow-x: scroll;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    padding: $grid-gutter-width/2;
+  }
+
+
+  .h-page-selector{
+    font-size: 10pt;
+    cursor: pointer;
+    display: inline-block;
+    text-align: center;
+    width: $table-page-button-size;
+    height: $table-page-button-size;
+    line-height: $table-page-button-size;
+
+    border-radius: 50%;
+    border: 1px solid $table-border-color;
+
+    &:not(:first-child){
+      margin-left: $grid-gutter-width/2
+    }
+
+    &.h-page-selector-active{
+      color: rgba(40, 61, 255, 0.73);
+      border-color: rgba(40, 61, 255, 0.73);
+      background-color: rgba(91, 220, 255, 0.19);
+    }
+  }
 }

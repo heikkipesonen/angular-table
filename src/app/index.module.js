@@ -9,6 +9,7 @@ import {TableCellDirective} from './directives/table-cell';
 import {TableHeaderDirective} from './directives/table-header';
 import {DataTableHeaderCellDirective} from './directives/table-header';
 import {DataTableHeaderRowDirective} from './directives/table-header';
+import {TableDetailViewService} from './directives/table-detail-view';
 import * as extra from './directives/table-extra';
 import data from './directives/data';
 
@@ -33,6 +34,8 @@ angular.module('hTable', ['ngAnimate', 'toastr'])
   .directive('hDataTableRow', DataTableRowDirective)
   .directive('hDataTableHeader', DataTableHeaderRowDirective)
   .directive('hDataTableHeaderCell', DataTableHeaderCellDirective)
+
+  .service('TableDetailViewService', TableDetailViewService)
 
   .controller('MainController', function ($scope) {
     'ngInject';
@@ -59,6 +62,14 @@ angular.module('hTable', ['ngAnimate', 'toastr'])
           key: 'unit',
           label: 'unit',
           classNames: 'fit-content text-center'
+        },
+        {
+          key: 'package_size',
+          label: 'Size'
+        },
+        {
+          key: 'package_price',
+          label: 'Price'
         }
       ],
       controls: {
