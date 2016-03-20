@@ -17,8 +17,6 @@ export class TableDetailViewService{
       this.$controller = $controller;
       this.$q = $q;
 
-      console.log($controller);
-
       this.visibleViews = [];
   }
 
