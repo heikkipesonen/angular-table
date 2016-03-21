@@ -99,7 +99,7 @@ angular.module('hTable', ['ngAnimate'])
         },
 
         {
-          key: 'avilable',
+          key: 'available',
           label:'Available',
           classNames: 'fit-content text-center'
         },

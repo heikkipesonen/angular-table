@@ -9,13 +9,14 @@ export function TableDirective(){
   }
 }
 
+
 export class DataTableController {
   constructor($scope, TableDetailViewService){
     'ngInject';
 
     this.TableDetailViewService = TableDetailViewService;
-    this.rows = this.options.data;
-
+    this.rows = [];
+    this.pages = [];
 
     /**
      * watch data rows,
@@ -32,7 +33,7 @@ export class DataTableController {
         itemsPerPage: this.options.itemsPerPage,
         columns: this.options.columns
       };
-    }, () => this.update(), true);
+    }, () => this.filter(), true);
 
 
     /**
@@ -43,11 +44,18 @@ export class DataTableController {
      */
     $scope.$watch(()=>{
       return this.page;
-    }, () => {
-      this.setPage(parseInt(this.page) || 0);
-      this.TableDetailViewService.closeAll()
-    });
+    }, () => this.setPage(this.page));
+    /**
+     * watch selected page change
+     * only update view model offset
+     * @param  {[type]} ( [description]
+     * @return {[type]}   [description]
+     */
+    $scope.$watch(()=>{
+      return this.options.filter;
+    }, () => this.filter(), true);
   }
+
 
   /**
    * refresh pages model and set page index as data is
@@ -55,7 +63,6 @@ export class DataTableController {
    * @return {[type]} [description]
    */
   update(){
-    this.TableDetailViewService.closeAll();
     this.buildPages();
     this.setPage(this.page || 0);
   }
@@ -66,10 +73,11 @@ export class DataTableController {
    */
   buildPages(){
     if (this.options.paged){
-      this.pages = Array(Math.ceil(this.options.data.length / parseInt(this.options.itemsPerPage)))
+      this.pages = Array(Math.ceil(this.rows.length / parseInt(this.options.itemsPerPage)))
         .fill(0)
         .map((item, index) => {
           return {
+            index: index,
             page: index,
             label: index + 1,
             start: index * this.options.itemsPerPage
@@ -90,10 +98,43 @@ export class DataTableController {
    */
   setPage(pageIndex) {
     pageIndex = pageIndex < 0 ? 0 : pageIndex < this.pages.length - 1 ? pageIndex : this.pages.length - 1;
+    pageIndex = pageIndex < 0 ? 0 : pageIndex;
     this._currentPage = this.pages[pageIndex];
+
     this.page = pageIndex;
+    this.viewModel = this.getPage();
+    this.TableDetailViewService.closeAll();
   }
 
+  /**
+   * get current page object
+   * @return {[type]} [description]
+   */
+  getPage(){
+    let page = this.pages[this.page] || {start: 0};
+    return this.rows.slice(page.start, page.start + parseInt(this.options.itemsPerPage));
+  }
+
+
+  compareValues(value, value2) {
+    value = (value + '').toLowerCase();
+    value2 = (value2 + '').toLowerCase();
+
+    return value.indexOf(value2) > -1;
+  }
+
+  filter(){
+    let filter = this.options.filter;
+    let filterFields = Object.keys(this.options.filter || {});
+
+    this.rows = this.options.data.filter((item) => {
+        return filterFields.every((field) => {
+          return this.compareValues(item[field], filter[field]);
+        });
+    });
+
+    this.update();
+  }
   /**
    * show extra information
    * @param  {[type]} event [description]
@@ -170,7 +211,7 @@ export function DataTableDirective(){
             'h-row-even' : $even,
             'h-row-odd' : $odd
           }"
-          ng-repeat="row in datatable.rows | limitTo : datatable.options.paged ? datatable.options.itemsPerPage : null : datatable._currentPage.start track by $index">
+          ng-repeat="row in datatable.viewModel track by $index">
 
           <h-table-row-controls
             ng-if="datatable.options.controls.left"

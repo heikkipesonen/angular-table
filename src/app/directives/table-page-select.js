@@ -5,7 +5,7 @@ export function TablePageSelect(){
     replace: true,
     scope: {
       pages: '=',
-      page: '=',
+      page: '='
     },
     controller: function PageSelectorController($scope){
       'ngInject';
@@ -13,18 +13,13 @@ export function TablePageSelect(){
       let updateVisibleButtons = () => {
         let pages = $scope.pages ? $scope.pages : [];
 
-        let currentIndex = $scope.page;
+        let currentIndex = $scope.page || 0;
             currentIndex = currentIndex > 2 ? currentIndex - 3 : 0;
 
         let toMaxIndex = pages.length - 1 - currentIndex;
             currentIndex = toMaxIndex < 6 ? currentIndex - (6 - toMaxIndex) : currentIndex;
 
-        $scope.buttons.length = 0;
-
-        while ($scope.buttons.length <= 6 && currentIndex <= pages.length-1){
-          $scope.buttons.push(pages[currentIndex]);
-          currentIndex++;
-        }
+        $scope.buttons = pages.slice(currentIndex, currentIndex + 7);
       };
 
       $scope.prevPage = () => $scope.setPage($scope.page -1);
@@ -35,6 +30,9 @@ export function TablePageSelect(){
         $scope.page = pageIndex;
       };
 
+      $scope.isSelected = (button) => {
+        return button.index === parseInt($scope.page);
+      }
 
       $scope.$watch(()=>{
         return {
@@ -50,9 +48,9 @@ export function TablePageSelect(){
             <i class="ion-ios-arrow-left"></i>
           </div>
           <div class="h-page-selector"
-            ng-class="{'h-page-selector-active' : page === pages.indexOf(button)}"
-            ng-repeat="button in buttons track by $index"
-            ng-click="setPage(pages.indexOf(button))">
+            ng-class="{'h-page-selector-active' : isSelected(button)}"
+            ng-repeat="button in buttons track by button.index"
+            ng-click="setPage(button.index)">
             {{button.label}}
           </div>
           <div class="h-page-selector" ng-click="nextPage()">

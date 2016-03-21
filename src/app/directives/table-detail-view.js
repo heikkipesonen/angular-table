@@ -34,7 +34,7 @@ export class TableDetailViewService{
     rowElement.$$scope.close();
   }
 
-  showDetails(data, rowElement, template, inject) {
+  showDetails(data, rowElement, template) {
     if (this.visibleViews.indexOf(rowElement) > -1){
       return;
     }

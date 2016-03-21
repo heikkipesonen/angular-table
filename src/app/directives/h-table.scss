@@ -1,6 +1,6 @@
 $table-row-height: 40px !default;
 $table-border-color: rgb(226, 223, 223) !default;
-$grid-gutter-width: 16px !default;
+$grid-gutter-width: 32px !default;
 $table-row-icon-size: 42px !default;
 $table-button-size: 42px !default;
 $table-page-button-size: 32px !default;
@@ -179,10 +179,11 @@ $table-details-background: rgb(255, 255, 255) !default;
 
 .h-table-filter-row{
   td{
-    padding: 1px 0;
+    padding: $grid-gutter-width/2 0;
   }
 
   input{
+    background-color: transparent;
     border: none;
     outline: none;
     box-sizing: border-box;
