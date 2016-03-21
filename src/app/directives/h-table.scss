@@ -5,12 +5,14 @@ $table-row-icon-size: 42px !default;
 $table-button-size: 42px !default;
 $table-page-button-size: 32px !default;
 $table-header-height: 50px !default;
-$table-breakpoint: 600px !default;
 $table-header-border: rgb(200, 200, 200) !default;
 $table-row-striped: rgba(0,0,0,0.05) !default;
 $table-loading-gradient-start: #1a5bec !default;
 $table-loading-gradient-end: lighten($table-loading-gradient-start, 30) !default;
 $table-details-background: rgb(255, 255, 255) !default;
+
+$table-breakpoint: 767px !default;
+$table-overlay-color: rgba(0,0,0,0.3);
 
 .data-table-container{
   margin: 50px;
@@ -35,8 +37,9 @@ $table-details-background: rgb(255, 255, 255) !default;
 
 
 
-  td, th{
+  td,th{
     padding: $grid-gutter-width/2;
+    overflow: hidden;
   }
 
   td.h-table-row-controls, th.h-table-row-controls{
@@ -44,6 +47,11 @@ $table-details-background: rgb(255, 255, 255) !default;
     padding: 0;
     width: 1%;
     text-align: center;
+
+    .table-cell-content{
+      padding: 0;
+      height: $table-button-size;
+    }
   }
 
   .fit-content{
@@ -70,6 +78,7 @@ $table-details-background: rgb(255, 255, 255) !default;
     min-width: $table-button-size;
     height: $table-button-size;
     width: $table-row-icon-size;
+    text-align: center;
 
     font-size: $table-button-size*0.5;
     cursor: pointer;
@@ -133,53 +142,11 @@ $table-details-background: rgb(255, 255, 255) !default;
        }
     }
    }
-
-
-  //
-  // @media (max-width: $table-breakpoint){
-  //   td.table-row-controls, th.table-row-controls{
-  //     white-space: normal;
-  //
-  //   }
-  //
-  //   .table-row-controls-left{
-  //     border-right: 1px solid $table-border-color;
-  //   }
-  //
-  //   .table-header-row{
-  //     display: none;
-  //   }
-  //
-  //   .h-data-table-data-cell, .table-header-row th{
-  //     position: relative;
-  //     display: block;
-  //   }
-  //
-  //   tr td.h-data-table-data-cell{
-  //     border: none;
-  //     padding: $grid-gutter-width/4 $grid-gutter-width/2;
-  //
-  //     &:first-of-type{
-  //       padding-top: $grid-gutter-width/2;
-  //     }
-  //   }
-  //
-  //   .h-data-table-data-cell:before{
-  //     content: attr(data-cell-label);
-  //     font-weight: bold;
-  //     font-size: 6pt;
-  //     display: block;
-  //   }
-  //
-  //   tr:not(:last-of-type){
-  //     border-bottom: 1px solid $table-border-color;
-  //   }
-  // }
 }
 
 .h-table-filter-row{
   td{
-    padding: $grid-gutter-width/2 0;
+    padding: 0;
   }
 
   input{
@@ -192,7 +159,7 @@ $table-details-background: rgb(255, 255, 255) !default;
     width: 100%;
   }
 }
-
+@media (min-width: $table-breakpoint){
 .h-table-details-row{
 
   td{
@@ -229,5 +196,164 @@ $table-details-background: rgb(255, 255, 255) !default;
 
   &.ng-leave-active .h-table-details-wrapper{
     max-height: 0;
+  }
+}
+}
+
+@media (max-width: $table-breakpoint){
+  .data-table-container{
+    margin: 0px;
+  }
+
+  .h-data-table{
+
+    .h-table-filter-row{
+      display: none;
+    }
+
+    tr.h-row-even{
+      background-color:transparent;
+    }
+
+    tr{
+      display: block;
+      position: relative;
+      padding-bottom: $table-button-size;
+    }
+
+    .table-row-controls-left{
+      border-right: 1px solid $table-border-color;
+    }
+
+    .h-table-header-row{
+      display: none;
+    }
+
+    td.h-table-row-controls{
+      white-space: normal;
+      border: none;
+      display: block;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 50%;
+      box-sizing: border-box;
+
+      border-bottom: none !important;
+      border-top: 1px solid $table-border-color;
+
+
+      text-align: right;
+      &.table-row-controls-right{
+        text-align: left;
+        left: auto;
+        right: 0;
+      }
+    }
+
+    .h-data-table-data-cell{
+      box-sizing: border-box;
+      position: relative;
+      display: block;
+      text-align: left;
+      border: none !important;
+      width: 100%;
+      padding: $grid-gutter-width/4;
+
+      &.h-label-cell{
+        font-size: 12pt;
+        width: 100%;
+        padding: $grid-gutter-width $grid-gutter-width/2;
+        background-color: #eee;
+      }
+
+      &.h-data-table-data-cell:not(.h-label-cell){
+        padding-left: 30%;
+      }
+
+      &.h-data-table-data-cell:not(.h-label-cell):before{
+        position: absolute;
+        left:0;
+        width: 30%;
+        display: block;
+        box-sizing: border-box;
+        content: attr(data-cell-label);
+        font-weight: bold;
+        font-size: 8pt;
+        line-height: 12pt;
+        text-align: right;
+        padding-right: $grid-gutter-width/2;
+      }
+    }
+
+    tr:not(:last-of-type){
+      border-bottom: 1px solid $table-border-color;
+    }
+  }
+
+  .h-table-details-wrapper{
+    box-sizing: border-box;
+    background-color: $table-details-background;
+  }
+  tr.h-table-details-row{
+    position: fixed;
+    display: block;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: $table-overlay-color;
+    z-index: 1;
+
+    .h-table-details-wrapper{
+      display: block;
+      position: absolute;
+      top: 0;
+      left: 10%;
+      right: 0;
+      bottom: 0;
+      height: auto;
+      width: auto;
+      padding: $grid-gutter-width/2;
+    }
+
+    &.ng-animate, &.ng-animate .h-table-details-wrapper{
+      transition: 0.3s;
+      transition-timing-function: ease-out;
+      overflow: hidden;
+    }
+
+    &.ng-enter{
+      background-color: fade_out($table-overlay-color, 1);
+    }
+
+    &.ng-enter-active{
+      background-color: $table-overlay-color;
+    }
+
+    &.ng-leave{
+      background-color: $table-overlay-color;
+    }
+
+    &.ng-leave-active{
+      background-color: fade_out($table-overlay-color, 1);
+    }
+
+    &.ng-enter .h-table-details-wrapper{
+      transform: translate3d(100%,0,0);
+    }
+
+    &.ng-enter-active .h-table-details-wrapper{
+      transform: translate3d(0,0,0);
+    }
+
+    &.ng-leave .h-table-details-wrapper{
+      transform: translate3d(100%,0,0);
+    }
+
+    &.ng-leave-active .h-table-details-wrapper{
+      transform: translate3d(0,0,0);
+    }
+
   }
 }

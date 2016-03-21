@@ -18,8 +18,13 @@ export function TablePageSelect(){
 
         let toMaxIndex = pages.length - 1 - currentIndex;
             currentIndex = toMaxIndex < 6 ? currentIndex - (6 - toMaxIndex) : currentIndex;
+            currentIndex = currentIndex < 0 ? 0 : currentIndex;
 
-        $scope.buttons = pages.slice(currentIndex, currentIndex + 7);
+
+        let maxIndex = currentIndex + 7;
+            maxIndex = maxIndex > pages.length ? pages.length : maxIndex;
+
+        $scope.buttons = pages.slice(currentIndex, maxIndex);
       };
 
       $scope.prevPage = () => $scope.setPage($scope.page -1);
@@ -34,12 +39,12 @@ export function TablePageSelect(){
         return button.index === parseInt($scope.page);
       }
 
-      $scope.$watch(()=>{
+      $scope.$watchCollection(()=>{
         return {
           pages: $scope.pages.length,
           page: $scope.page
         };
-      }, () => updateVisibleButtons() ,true );
+      }, () => updateVisibleButtons());
     },
     template: `
     <div class="h-page-select">

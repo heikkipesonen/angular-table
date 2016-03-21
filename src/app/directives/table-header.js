@@ -33,10 +33,33 @@ export function DataTableHeaderCellDirective(){
 
 export function DataTableFilterRowDirective(){
   return {
-    restrict: 'E',
+    restrict: 'A',
     replace: true,
     scope: {
       options: '='
+    },
+    controller: function DataTableFilterController($scope) {
+      'ngInject';
+
+      $scope.filterItems = 0;
+      let update = () => {
+
+        if (!$scope.options.filter){
+          return;
+        }
+
+        $scope.filterItems = Object.keys($scope.options.filter).reduce((maxValue, filterKey) => {
+          return $scope.options.filter[filterKey].length > maxValue ? $scope.options.filter[filterKey].length : maxValue;
+        }, 0);
+
+      };
+
+
+      $scope.$watch(()=>{
+        return $scope.options.filter;
+      }, () => {
+        update();
+      }, true);
     },
     template: `
     <tr class="h-table-filter-row">

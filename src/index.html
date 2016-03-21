@@ -25,15 +25,45 @@
     <![endif]-->
 
 <div ng-controller="MainController">
-<select ng-model="table.itemsPerPage">
-  <option value="10">10</option>
-  <option value="20">20</option>
-  <option value="30">30</option>
-  <option value="40">40</option>
-  <option value="50">50</option>
-</select>
-<input type="text" ng-model="page">
-  <h-data-table options="table" page="page"></h-data-table>
+
+  <div class="demo-container">
+  <h1>ultimate pro table</h1>
+
+  <div>
+    <div>
+      <label>Paged display:
+        <input type="checkbox" ng-model="table.paged">
+      </label>
+    </div>
+    <div>
+      <label>Items per page:
+      <select ng-model="table.itemsPerPage">
+        <option value="10">10</option>
+        <option value="30">30</option>
+        <option value="50">50</option>
+        <option value="100">100</option>
+        <option value="200">200</option>
+      </select>
+      </label>
+    </div>
+
+    <div>
+      <label>Page index:
+      <input type="text" ng-model="page">
+      </label>
+    </div>
+
+    <div>
+      <label>Filter source array by 'name' field:
+        <input type="text" ng-model="filterText">
+      </label>
+    </div>
+</div>
+
+  </div>
+
+
+  <h-data-table data="data" options="table" page="page"></h-data-table>
 </div>
 
 

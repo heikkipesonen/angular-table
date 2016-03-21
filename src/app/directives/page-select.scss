@@ -39,7 +39,7 @@
     &.ng-enter{
       width: 0;
       opacity: 0;
-      margin: 0;
+      margin: $grid-gutter-width/4 0;
       border-width: 0;
     }
 
@@ -61,7 +61,7 @@
     &.ng-leave-active{
       width: 0;
       opacity: 0;
-      margin: 0;
+      margin: $grid-gutter-width/4 0;
       border-width: 0;
     }
 

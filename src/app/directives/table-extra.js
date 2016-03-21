@@ -1,17 +1,19 @@
 export function TableRowControlsDirective(){
   return {
-    restrict: 'E',
+    restrict: 'A',
     replace: true,
     scope: {
       controls: '='
     },
     template: `
       <td class="h-table-row-controls">
-        <h-table-row-icon
-          ng-repeat="control in controls"
-          ng-click="$event.stopPropagation(); control.onclick({$event: $event, row: row})">
-            <i class="{{control.icon}}"></i>
+        <div class="table-cell-content">
+          <h-table-row-icon
+            ng-repeat="control in controls"
+            ng-click="$event.stopPropagation(); control.onclick({$event: $event, row: row})">
+              <i class="{{control.icon}}"></i>
           </h-table-row-icon>
+        </div>
       </td>
     `
   };

@@ -1,40 +1,13 @@
-export function TableDirective(){
-  return {
-    restrict: 'E',
-    replace: true,
-    transclude: true,
-    template: `
-    <table class="h-data-table" ng-transclude></table>
-    `
-  }
-}
-
-
 export class DataTableController {
-  constructor($scope, TableDetailViewService){
+  constructor($scope, TableDetailViewService, DataTableService, $timeout){
     'ngInject';
 
+    this.$timeout = $timeout;
     this.TableDetailViewService = TableDetailViewService;
+    this.DataTableService = DataTableService;
     this.rows = [];
     this.pages = [];
-
-    /**
-     * watch data rows,
-     * items per page,
-     * and columns for change
-     *
-     * if change then rebuild all
-     * @param  {[type]} ( [description]
-     * @return {[type]}   [description]
-     */
-    $scope.$watch(()=>{
-      return {
-        data: this.options.data.length,
-        itemsPerPage: this.options.itemsPerPage,
-        columns: this.options.columns
-      };
-    }, () => this.filter(), true);
-
+    this.page = 0;
 
     /**
      * watch selected page change
@@ -44,52 +17,29 @@ export class DataTableController {
      */
     $scope.$watch(()=>{
       return this.page;
-    }, () => this.setPage(this.page));
+    }, () => {
+      this.setPage(this.page);
+    });
+
+
     /**
-     * watch selected page change
-     * only update view model offset
+     * watch data and options change
+     * trigger full update when changed
      * @param  {[type]} ( [description]
      * @return {[type]}   [description]
      */
-    $scope.$watch(()=>{
-      return this.options.filter;
-    }, () => this.filter(), true);
-  }
+    $scope.$watchCollection(()=>{
+      return {
+        data: this.data,
+        paged: this.options.paged,
+        itemsPerPage: this.options.itemsPerPage,
+        columns: this.options.columns,
+        filter: this.options.filter
+      };
+    }, () => {
+      this.update();
+    }, true);
 
-
-  /**
-   * refresh pages model and set page index as data is
-   * changed
-   * @return {[type]} [description]
-   */
-  update(){
-    this.buildPages();
-    this.setPage(this.page || 0);
-  }
-
-  /**
-   * construct a list of page objects to track
-   * @return {[type]} [description]
-   */
-  buildPages(){
-    if (this.options.paged){
-      this.pages = Array(Math.ceil(this.rows.length / parseInt(this.options.itemsPerPage)))
-        .fill(0)
-        .map((item, index) => {
-          return {
-            index: index,
-            page: index,
-            label: index + 1,
-            start: index * this.options.itemsPerPage
-          };
-        });
-    } else {
-      this.pages = [{
-        page: 0,
-        label: 0,
-        start: 0
-      }];
-    }
   }
 
   /**
@@ -97,6 +47,7 @@ export class DataTableController {
    * @param {[type]} pageIndex [description]
    */
   setPage(pageIndex) {
+    pageIndex = pageIndex || 0;
     pageIndex = pageIndex < 0 ? 0 : pageIndex < this.pages.length - 1 ? pageIndex : this.pages.length - 1;
     pageIndex = pageIndex < 0 ? 0 : pageIndex;
     this._currentPage = this.pages[pageIndex];
@@ -112,29 +63,24 @@ export class DataTableController {
    */
   getPage(){
     let page = this.pages[this.page] || {start: 0};
-    return this.rows.slice(page.start, page.start + parseInt(this.options.itemsPerPage));
+    return this.options.paged ? this.rows.slice(page.start, page.start + parseInt(this.options.itemsPerPage)) : this.rows;
   }
 
+  update(){
+    this.rows = this.DataTableService.filter(this.data, this.options.filter);
+    if (this.options.paged){
+      this.pages = this.DataTableService.buildPages(this.rows, this.options.itemsPerPage);
+    } else {
+      this.pages = [{
+        page: 0,
+        label: 0,
+        start: 0
+      }];
+    }
 
-  compareValues(value, value2) {
-    value = (value + '').toLowerCase();
-    value2 = (value2 + '').toLowerCase();
-
-    return value.indexOf(value2) > -1;
+    this.setPage(this.page || 0);
   }
 
-  filter(){
-    let filter = this.options.filter;
-    let filterFields = Object.keys(this.options.filter || {});
-
-    this.rows = this.options.data.filter((item) => {
-        return filterFields.every((field) => {
-          return this.compareValues(item[field], filter[field]);
-        });
-    });
-
-    this.update();
-  }
   /**
    * show extra information
    * @param  {[type]} event [description]
@@ -167,6 +113,7 @@ export function DataTableDirective(){
     restrict: 'E',
     replace: true,
     scope: {
+      data: '=',
       page: '=?',
       options: '='
     },
@@ -176,36 +123,32 @@ export function DataTableDirective(){
     template: `
     <div class="data-table-container">
       <div class="data-table-wrapper">
-      <h-table>
-        <h-data-table-header>
-
-          <h-data-table-header-cell
+      <table class="h-data-table">
+        <tr class="h-table-header-row">
+          <th
             ng-if="datatable.options.controls.left.length"
-            class="table-row-controls">
-          </h-data-table-header-cell>
-
-          <h-data-table-header-cell
+            class="h-table-header-cell h-table-row-controls">
+          </th>
+          <th
             ng-repeat="column in datatable.options.columns"
             ng-click="datatable.tableHeaderClick(column)"
-            class="{{column.classNames || ''}}">
+            class="h-table-header-cell {{column.classNames || ''}}">
             {{column.label}}
-          </h-data-table-header-cell>
-
-          <h-data-table-header-cell
+          </th>
+          <th
             ng-if="datatable.options.controls.right.length"
-            class="table-row-controls">
-          </h-data-table-header-cell>
-
-        </h-data-table-header>
+            class="h-table-header-cell h-table-row-controls">
+          </th>
+        </tr>
 
         <h-data-table-row-loader></h-data-table-row-loader>
 
-
-        <h-data-table-filter-row
+        <tr h-data-table-filter-row
           options="datatable.options">
-        </h-data-table-filter-row>
+        </tr>
 
-        <h-data-table-row
+        <tr
+          class="h-table-row"
           ng-click="datatable.showDetails($event, row)"
           ng-class="{
             'h-row-even' : $even,
@@ -213,27 +156,30 @@ export function DataTableDirective(){
           }"
           ng-repeat="row in datatable.viewModel track by $index">
 
-          <h-table-row-controls
+          <td h-table-row-controls
             ng-if="datatable.options.controls.left"
             class="table-row-controls-left"
             controls="datatable.options.controls.left">
-          </h-table-row-controls>
+          </td>
 
-          <h-table-cell
+          <td
+            ng-class="{
+              'h-label-cell' : $first
+            }"
             data-cell-label="{{column.label}}: "
             class="h-data-table-data-cell {{column.classNames || ''}}"
             ng-repeat="column in datatable.options.columns">
               {{column.valueFilter ? column.valueFilter(row[column.key], row) : row[column.key]}}
-          </h-table-cell>
+          </td>
 
-          <h-table-row-controls
+          <td h-table-row-controls
             ng-if="datatable.options.controls.right"
             class="table-row-controls-right"
             controls="datatable.options.controls.right">
-          </h-table-row-controls>
+          </td>
 
-        </h-data-table-row>
-      </h-table>
+        </tr>
+      </table>
       </div>
       <h-table-page-select
         ng-if="datatable.options.paged"

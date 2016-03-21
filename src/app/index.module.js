@@ -1,13 +1,8 @@
 
-import {TableDirective} from './directives/table';
 import {DataTableDirective} from './directives/table';
-import {TableRowDirective} from './directives/table-row';
-import {DataTableRowDirective} from './directives/table-row';
-import {TableCellDirective} from './directives/table-cell';
-import {TableHeaderDirective} from './directives/table-header';
-import {DataTableHeaderCellDirective} from './directives/table-header';
 import {DataTableHeaderRowDirective} from './directives/table-header';
 import {DataTableFilterRowDirective} from './directives/table-header';
+import {DataTableService} from './directives/table-service';
 import {TableDetailViewService} from './directives/table-detail-view';
 import {TablePageSelect} from './directives/table-page-select';
 import * as extra from './directives/table-extra';
@@ -16,36 +11,33 @@ import data from './directives/data';
 
 angular.module('hTable', ['ngAnimate'])
 
-  .directive('hTable', TableDirective)
-  .directive('hTableRow', TableRowDirective)
-  .directive('hTableCell', TableCellDirective)
-  .directive('hTableHeader', TableHeaderDirective)
-
   .directive('hTableRowControls', extra.TableRowControlsDirective)
   .directive('hTableRowIcon', extra.TableRowIconDirective)
   .directive('hTableRowButton', extra.TableRowButtonDirective)
   .directive('hDataTableRowLoader', extra.TableRowLoaderDirective)
   .directive('hTablePageSelect', TablePageSelect)
 
-
   .directive('hDataTable', DataTableDirective)
-  .directive('hDataTableRow', DataTableRowDirective)
-  .directive('hDataTableHeader', DataTableHeaderRowDirective)
-  .directive('hDataTableHeaderCell', DataTableHeaderCellDirective)
   .directive('hDataTableFilterRow', DataTableFilterRowDirective)
 
   .service('TableDetailViewService', TableDetailViewService)
+  .service('DataTableService', DataTableService)
 
   .controller('MainController', function ($scope) {
     'ngInject';
+    /**
+     * table row data
+     * @type {Array}
+     */
 
+    $scope.$watch('filterText', () => {
+      $scope.data = data.filter((item) => {
+        return $scope.filterText ? item.name.indexOf($scope.filterText) > -1 : true;
+      });
+    });
+
+    $scope.data = data;
     $scope.table = {
-      /**
-       * table row data
-       * @type {Array}
-       */
-      data: data,
-
       /**
        * is table paged or all items displayed at once?
        * @type {Boolean}
