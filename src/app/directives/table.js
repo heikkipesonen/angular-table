@@ -28,7 +28,7 @@ export class DataTableController {
      * @param  {[type]} ( [description]
      * @return {[type]}   [description]
      */
-    $scope.$watchCollection(()=>{
+    $scope.$watch(()=>{
       return {
         data: this.data,
         paged: this.options.paged,
