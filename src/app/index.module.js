@@ -1,7 +1,7 @@
 
 import {DataTableDirective} from './directives/table';
-import {DataTableHeaderRowDirective} from './directives/table-header';
 import {DataTableFilterRowDirective} from './directives/table-header';
+import {DataTableRowsDirective} from './directives/datatable-row';
 import {DataTableService} from './directives/table-service';
 import {TableDetailViewService} from './directives/table-detail-view';
 import {TablePageSelect} from './directives/table-page-select';
@@ -19,30 +19,34 @@ angular.module('hTable', ['ngAnimate'])
 
   .directive('hDataTable', DataTableDirective)
   .directive('hDataTableFilterRow', DataTableFilterRowDirective)
+  .directive('hDataTableRows', DataTableRowsDirective)
 
   .service('TableDetailViewService', TableDetailViewService)
   .service('DataTableService', DataTableService)
 
   .controller('MainController', function ($scope) {
     'ngInject';
+
+    let d = data.slice(0,1000);
     /**
      * table row data
      * @type {Array}
      */
 
     $scope.$watch('filterText', () => {
-      $scope.data = data.filter((item) => {
+      $scope.data = d.filter((item) => {
         return $scope.filterText ? item.name.indexOf($scope.filterText) > -1 : true;
       });
     });
 
-    $scope.data = data;
+    $scope.data = d;
+
     $scope.table = {
       /**
        * is table paged or all items displayed at once?
        * @type {Boolean}
        */
-      paged: true,
+      paged: false,
 
       /**
        * if paged, how many items shown at once?

@@ -123,63 +123,11 @@ export function DataTableDirective(){
     template: `
     <div class="data-table-container">
       <div class="data-table-wrapper">
-      <table class="h-data-table">
-        <tr class="h-table-header-row">
-          <th
-            ng-if="datatable.options.controls.left.length"
-            class="h-table-header-cell h-table-row-controls">
-          </th>
-          <th
-            ng-repeat="column in datatable.options.columns"
-            ng-click="datatable.tableHeaderClick(column)"
-            class="h-table-header-cell {{column.classNames || ''}}">
-            {{column.label}}
-          </th>
-          <th
-            ng-if="datatable.options.controls.right.length"
-            class="h-table-header-cell h-table-row-controls">
-          </th>
-        </tr>
-
-        <h-data-table-row-loader></h-data-table-row-loader>
-
-        <tr h-data-table-filter-row
-          options="datatable.options">
-        </tr>
-
-        <tr
-          class="h-table-row"
-          ng-click="datatable.showDetails($event, row)"
-          ng-class="{
-            'h-row-even' : $even,
-            'h-row-odd' : $odd
-          }"
-          ng-repeat="row in datatable.viewModel track by $index">
-
-          <td h-table-row-controls
-            ng-if="datatable.options.controls.left"
-            class="table-row-controls-left"
-            controls="datatable.options.controls.left">
-          </td>
-
-          <td
-            ng-class="{
-              'h-label-cell' : $first
-            }"
-            data-cell-label="{{column.label}}: "
-            class="h-data-table-data-cell {{column.classNames || ''}}"
-            ng-repeat="column in datatable.options.columns">
-              {{column.valueFilter ? column.valueFilter(row[column.key], row) : row[column.key]}}
-          </td>
-
-          <td h-table-row-controls
-            ng-if="datatable.options.controls.right"
-            class="table-row-controls-right"
-            controls="datatable.options.controls.right">
-          </td>
-
-        </tr>
-      </table>
+        <table class="h-data-table"
+          options="datatable.options"
+          rows="datatable.viewModel"
+          h-data-table-rows>
+        </table>
       </div>
       <h-table-page-select
         ng-if="datatable.options.paged"
