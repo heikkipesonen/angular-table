@@ -2,6 +2,7 @@
 import {DataTableDirective} from './directives/table';
 import {DataTableFilterRowDirective} from './directives/table-header';
 import {DataTableRowsDirective} from './directives/datatable-row';
+import {DataTableRowDirective} from './directives/datatable-row';
 import {DataTableService} from './directives/table-service';
 import {TableDetailViewService} from './directives/table-detail-view';
 import {TablePageSelect} from './directives/table-page-select';
@@ -20,6 +21,7 @@ angular.module('hTable', ['ngAnimate'])
   .directive('hDataTable', DataTableDirective)
   .directive('hDataTableFilterRow', DataTableFilterRowDirective)
   .directive('hDataTableRows', DataTableRowsDirective)
+  .directive('hDataTableRow', DataTableRowDirective)
 
   .service('TableDetailViewService', TableDetailViewService)
   .service('DataTableService', DataTableService)
@@ -34,9 +36,12 @@ angular.module('hTable', ['ngAnimate'])
      */
 
     $scope.$watch('filterText', () => {
+      console.time('sort');
       $scope.data = d.filter((item) => {
         return $scope.filterText ? item.name.indexOf($scope.filterText) > -1 : true;
       });
+      console.timeEnd('sort');
+
     });
 
     $scope.data = d;
