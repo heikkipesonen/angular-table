@@ -1,19 +1,32 @@
-export function TableRowControlsDirective(){
+export function TableRowControlsDirective($compile){
+  'ngInject';
+
   return {
     restrict: 'A',
     replace: true,
     scope: {
       controls: '='
     },
+    compile: function () {
+      return {
+        pre: function ($scope,  $element) {
+          let controls = $scope.controls.map((control) => {
+            return `
+              <div class="h-table-row-icon">
+                  <i class="${control.icon}"></i>
+              </div>`;
+          });
+
+          $element[0].appendChild($compile(`<div class="table-cell-content">${controls}</div>`)($scope));
+        },
+
+        post: function($scope, $element) {
+
+        }
+      }
+    },
     template: `
       <td class="h-table-row-controls">
-        <div class="table-cell-content">
-          <h-table-row-icon
-            ng-repeat="control in controls"
-            ng-click="$event.stopPropagation(); control.onclick({$event: $event, row: row})">
-              <i class="{{control.icon}}"></i>
-          </h-table-row-icon>
-        </div>
       </td>
     `
   };

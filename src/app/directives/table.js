@@ -5,9 +5,11 @@ export class DataTableController {
     this.$timeout = $timeout;
     this.TableDetailViewService = TableDetailViewService;
     this.DataTableService = DataTableService;
+
     this.rows = [];
     this.pages = [];
     this.page = 0;
+    this.viewModel = [];
 
     /**
      * watch selected page change
@@ -63,8 +65,7 @@ export class DataTableController {
    */
   getPage(){
     let page = this.pages[this.page] || {start: 0};
-    let rows = this.options.paged ? this.rows.slice(page.start, page.start + parseInt(this.options.itemsPerPage)) : this.rows;
-    return rows.map((row) => this.getDataRow(row));
+    return this.options.paged ? this.rows.slice(page.start, page.start + parseInt(this.options.itemsPerPage)) : this.rows;
   }
 
   update(){
@@ -82,12 +83,7 @@ export class DataTableController {
     this.setPage(this.page || 0);
   }
 
-  getDataRow(row) {
-    return {
-      row: row,
-      options: this.options
-    }
-  }
+
 
   /**
    * show extra information
@@ -132,10 +128,10 @@ export function DataTableDirective(){
     template: `
     <div class="data-table-container">
       <div class="data-table-wrapper">
-        <table class="h-data-table">
-          <tr
-            ng-repeat="row in datatable.viewModel track by $index"
-            data="row" h-data-table-row></tr>
+        <table h-data-table-rows
+          class="h-data-table"
+          rows="datatable.viewModel"
+          options="datatable.options">
         </table>
       </div>
       <h-table-page-select
