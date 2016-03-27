@@ -122,7 +122,13 @@ export function DataTableDirective(){
     controllerAs: 'datatable',
     template: `
     <div class="data-table-container">
-      <div class="data-table-wrapper">
+
+      <h-table-page-select
+        ng-if="datatable.options.paged"
+        page="datatable.page"
+        pages="datatable.pages">
+      </h-table-page-select>
+
       <table class="h-data-table">
         <tr class="h-table-header-row">
           <th
@@ -143,9 +149,7 @@ export function DataTableDirective(){
 
         <h-data-table-row-loader></h-data-table-row-loader>
 
-        <tr h-data-table-filter-row
-          options="datatable.options">
-        </tr>
+
 
         <tr
           h-table-row
@@ -153,17 +157,15 @@ export function DataTableDirective(){
           class="h-table-row"
           ng-click="datatable.showDetails($event, row)"
           ng-repeat="row in datatable.viewModel track by $index">
-
-
-
         </tr>
       </table>
-      </div>
+
       <h-table-page-select
         ng-if="datatable.options.paged"
         page="datatable.page"
         pages="datatable.pages">
       </h-table-page-select>
+
     </div>
     `
   }

@@ -1,25 +1,26 @@
+$table-theme-color: rgb(14, 139, 255);
+
+
 $table-row-height: 40px !default;
-$table-border-color: rgb(226, 223, 223) !default;
+$table-border-color: rgb(231, 231, 231) !default;
 $grid-gutter-width: 32px !default;
 $table-row-icon-size: 42px !default;
 $table-button-size: 42px !default;
 $table-page-button-size: 32px !default;
 $table-header-height: 50px !default;
-$table-header-border: rgb(200, 200, 200) !default;
-$table-row-striped: rgba(0,0,0,0.05) !default;
+$table-header-border: $table-border-color !default;
+$table-row-stripe: #eee !default;
 $table-loading-gradient-start: #1a5bec !default;
 $table-loading-gradient-end: lighten($table-loading-gradient-start, 30) !default;
-$table-details-background: rgb(255, 255, 255) !default;
 
 $table-breakpoint: 767px !default;
-$table-overlay-color: rgba(0,0,0,0.3);
+$table-overlay-color: rgba(0,0,0,0.3) !default;
 
-.data-table-container{
-  margin: 50px;
-}
+$table-page-selector-hilight-color: $table-theme-color !default;
+$table-page-selector-hilight-text: lighten($table-theme-color, 100) !default;
 
-.data-table-wrapper{
-}
+$table-details-background: rgb(224, 224, 224) !default;
+$table-details-height: 300px !default;
 
 .h-data-table{
   overflow: hidden;
@@ -31,15 +32,13 @@ $table-overlay-color: rgba(0,0,0,0.3);
   border-spacing:0;
   background-image:none;
 
-
   width: 100%;
   border: none;
-
-
 
   td,th{
     padding: $grid-gutter-width/2;
     overflow: hidden;
+    vertical-align: middle;
   }
 
   td.h-table-row-controls, th.h-table-row-controls{
@@ -93,12 +92,10 @@ $table-overlay-color: rgba(0,0,0,0.3);
     position: relative;
     z-index: 20;
     border-bottom: 1px solid $table-header-border;
-    // box-shadow: 0px 20px 50px -30px rgba(0, 0, 0, 0.3);
   }
 
   .h-table-header-row th{
     height: $table-header-height;
-    font-weight: normal;
     text-align: left;
     text-transform: capitalize;
     vertical-align: bottom;
@@ -113,7 +110,7 @@ $table-overlay-color: rgba(0,0,0,0.3);
   }
 
   tr.h-table-row-even{
-    background-color: $table-row-striped;
+    background-color: $table-row-stripe;
   }
 
   tr.h-data-table-loader{
@@ -187,11 +184,11 @@ $table-overlay-color: rgba(0,0,0,0.3);
   }
 
   &.ng-enter-active .h-table-details-wrapper{
-    max-height: 200px;
+    max-height: $table-details-height;
   }
 
   &.ng-leave .h-table-details-wrapper{
-    max-height: 200px;
+    max-height: $table-details-height;
   }
 
   &.ng-leave-active .h-table-details-wrapper{
@@ -278,7 +275,6 @@ $table-overlay-color: rgba(0,0,0,0.3);
         display: block;
         box-sizing: border-box;
         content: attr(data-cell-label);
-        font-weight: bold;
         font-size: 8pt;
         line-height: 12pt;
         text-align: right;
