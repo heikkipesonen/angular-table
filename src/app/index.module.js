@@ -3,6 +3,7 @@ import {DataTableDirective} from './directives/table';
 import {DataTableHeaderRowDirective} from './directives/table-header';
 import {DataTableFilterRowDirective} from './directives/table-header';
 import {DataTableService} from './directives/table-service';
+import {DataTableRowDirective} from './directives/table-row';
 import {TableDetailViewService} from './directives/table-detail-view';
 import {TablePageSelect} from './directives/table-page-select';
 import * as extra from './directives/table-extra';
@@ -11,14 +12,13 @@ import data from './directives/data';
 
 angular.module('hTable', ['ngAnimate'])
 
-  .directive('hTableRowControls', extra.TableRowControlsDirective)
-  .directive('hTableRowIcon', extra.TableRowIconDirective)
-  .directive('hTableRowButton', extra.TableRowButtonDirective)
+  .directive('hDataTable', DataTableDirective)
+  .directive('hDataTableFilterRow', DataTableFilterRowDirective)
+  .directive('hTableRow', DataTableRowDirective)
+
   .directive('hDataTableRowLoader', extra.TableRowLoaderDirective)
   .directive('hTablePageSelect', TablePageSelect)
 
-  .directive('hDataTable', DataTableDirective)
-  .directive('hDataTableFilterRow', DataTableFilterRowDirective)
 
   .service('TableDetailViewService', TableDetailViewService)
   .service('DataTableService', DataTableService)
@@ -48,7 +48,7 @@ angular.module('hTable', ['ngAnimate'])
        * if paged, how many items shown at once?
        * @type {Number}
        */
-      itemsPerPage: 10,
+      itemsPerPage: 100,
 
       /**
        * does table have detailed view of items?

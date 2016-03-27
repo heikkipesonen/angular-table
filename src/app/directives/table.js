@@ -148,35 +148,13 @@ export function DataTableDirective(){
         </tr>
 
         <tr
+          h-table-row
+          row="row"
           class="h-table-row"
           ng-click="datatable.showDetails($event, row)"
-          ng-class="{
-            'h-row-even' : $even,
-            'h-row-odd' : $odd
-          }"
           ng-repeat="row in datatable.viewModel track by $index">
 
-          <td h-table-row-controls
-            ng-if="datatable.options.controls.left"
-            class="table-row-controls-left"
-            controls="datatable.options.controls.left">
-          </td>
 
-          <td
-            ng-class="{
-              'h-label-cell' : $first
-            }"
-            data-cell-label="{{column.label}}: "
-            class="h-data-table-data-cell {{column.classNames || ''}}"
-            ng-repeat="column in datatable.options.columns">
-              {{column.valueFilter ? column.valueFilter(row[column.key], row) : row[column.key]}}
-          </td>
-
-          <td h-table-row-controls
-            ng-if="datatable.options.controls.right"
-            class="table-row-controls-right"
-            controls="datatable.options.controls.right">
-          </td>
 
         </tr>
       </table>
