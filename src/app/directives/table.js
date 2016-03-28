@@ -188,6 +188,7 @@ export function DataTableDirective(){
         <h-data-table-row-loader></h-data-table-row-loader>
 
         <tr
+          ng-if="datatable.options.rowFilter"
           h-data-table-filter-row options="datatable.options"
           class="h-table-filter-row">
         </tr>

@@ -16,6 +16,12 @@ angular.module('hTable').controller('MainController', function ($scope) {
 
   $scope.data = data;
   $scope.table = {
+
+    /**
+     * enable filter inputs under the table header
+     * @type {Boolean}
+     */
+    rowFilter: false,
     /**
      * is table paged or all items displayed at once?
      * @type {Boolean}
