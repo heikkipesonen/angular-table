@@ -34,7 +34,6 @@ actions that result everything exploding
   - filtering
   - sorting
 - row icons / buttons
-- all data paging, filtering and sorting in one service
 
 
 currently watches changes on (ie. things that can be changed when live):
@@ -50,13 +49,9 @@ filter: this.options.filter
 ##### features could be or may be under development
 
 - extra content display (new row rendered)  
+  -  controllers, scope and better templates
 - configurable filters and sorters ($provider)
-
-##### maybe planned
-
-- promise data input
-- loading from url
-- $resource support(?)
+- provide data as promise
 
 ## Usage
 ```HTML
