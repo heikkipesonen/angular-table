@@ -16,7 +16,7 @@ this directive is still under preliminary development so it should not be used b
 
 ## Features
 
-- works almosti like angular directive should,
+- works almost like angular directive should,
   - manipulate data somewhere, display with this
   - should update automatically
 - relatively fast render, with hundreds of rows at once
@@ -56,11 +56,11 @@ filter: this.options.filter
 ```HTML
   <h-data-table data="data" options="table" page="page"></h-data-table>
 ```
- variable | description
- --- | ---
- data | data provider, array of objects [{key: value}, {key: value} ..-]
- options | table options object
-page | page index currently displayed
+| variable | description |
+| --- | --- |
+| data | data provider, array of objects [{key: value}, {key: value} ..-] |
+| options | table options object |
+| page | page index currently displayed |
 
 ### options
 
@@ -69,27 +69,27 @@ horribly complex options to be provided for the table directive to correctly dis
 some of these are optional, other are not.
 
 
-key | type | description
--- | -- | --
-rowfilter | boolean | show filter row as first row
-paged | boolean | paged display, if false, all data displayed at once
-itemsPerPage | number | how many items per page is shown
-details | object | configuration for details view, extra row rendered under tr for displaying more info
-details.* | null | under development
-orderBy | object | orderby filter
-orderBy.key | string | object key (in data[index]) to sort viewmodel
-orderBy.reverse | boolean | reverse sort by key
-columns | array | array of columns (see below)
-controls | object | row controls (see below)
+| key | type | description |
+| -- | -- | -- |
+| rowfilter | boolean | show filter row as first row |
+| paged | boolean | paged display, if false, all data displayed at once |
+| itemsPerPage | number | how many items per page is shown |
+| details | object | configuration for details view, extra row rendered under tr for  displaying more info |
+| details.* | null | under development |
+| orderBy | object | orderby filter |
+| orderBy.key | string | object key (in data[index]) to sort viewmodel |
+| orderBy.reverse | boolean | reverse sort by key |
+| columns | array | array of columns (see below) |
+| controls | object | row controls (see below) |
 
 #### column configuration
-key | type | description
--- | -- | --
-key | string | object key for value to render
-label | string | column label (for header)
-classNames | string | class names to add into each cell in current column
-cellTemplate | string | string to wrap cell content, replaces `{{content}}` string with (filtered)cell value
-filter | function | cell value filter, should return string to be placed into cell
+| key | type | description |
+| -- | -- | -- |
+| key | string | object key for value to render |
+| label | string | column label (for header) |
+| classNames | string | class names to add into each cell in current column |
+| cellTemplate | string | string to wrap cell content, replaces `{{content}}` string | with (filtered)cell value |
+| filter | function | cell value filter, should return string to be placed into cell |
 
 ##### example:
 
