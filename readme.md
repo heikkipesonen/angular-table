@@ -12,7 +12,7 @@ this is still under preliminary development so it should not be used by anyone e
 
 # installation
 
-not currently, need to create a build....
+no.
 
 ---
 
