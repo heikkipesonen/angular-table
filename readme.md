@@ -54,13 +54,13 @@ filter: this.options.filter
 
 ## Usage
 ```HTML
-  <h-data-table data="data" options="table" page="page"></h-data-table>
+  <h-data-table data="data" options="dataTableOptions" page="page"></h-data-table>
 ```
-| variable | description |
-| --- | --- |
-| data | data provider, array of objects [{key: value}, {key: value} ..-] |
-| options | table options object |
-| page | page index currently displayed |
+ variable | description
+ --- | ---
+ data | data provider, array of objects [{key: value}, {key: value} ..-]
+ options | table options object
+page | page index currently displayed
 
 ### options
 
@@ -68,105 +68,169 @@ horribly complex options to be provided for the table directive to correctly dis
 
 some of these are optional, other are not.
 
-
-| key | type | description |
-| -- | -- | -- |
-| rowfilter | boolean | show filter row as first row |
-| paged | boolean | paged display, if false, all data displayed at once |
-| itemsPerPage | number | how many items per page is shown |
-| details | object | configuration for details view, extra row rendered under tr for  displaying more info |
-| details.* | null | under development |
-| orderBy | object | orderby filter |
-| orderBy.key | string | object key (in data[index]) to sort viewmodel |
-| orderBy.reverse | boolean | reverse sort by key |
-| columns | array | array of columns (see below) |
-| controls | object | row controls (see below) |
-
-#### column configuration
-| key | type | description |
-| -- | -- | -- |
-| key | string | object key for value to render |
-| label | string | column label (for header) |
-| classNames | string | class names to add into each cell in current column |
-| cellTemplate | string | string to wrap cell content, replaces `{{content}}` string | with (filtered)cell value |
-| filter | function | cell value filter, should return string to be placed into cell |
-
-##### example:
-
 ```javascript
-{
+dataTableOptions = {
 
   /**
-   * object key to use as value
-   * @type {String}
+   * enable filter inputs under the table header
+   * @type {Boolean}
    */
-  key: 'name',
+  rowFilter: false,
+  /**
+   * is table paged or all items displayed at once?
+   * @type {Boolean}
+   */
+  paged: true,
 
   /**
-   * label for column
-   * @type {String}
+   * if paged, how many items shown at once?
+   * @type {Number}
    */
-  label: 'Name',
+  itemsPerPage: 100,
 
   /**
-   * classnames to add to the table cell
-   * @type {String}
+   * does table have detailed view of items?
+   * rowclick opens new row underneath the original one
+   * @type {Object}
    */
-  classNames: 'col-lt-md-hide',
+  details: {
+    /**
+     * details view (row clicked)
+     * row data is provided as data into template scope
+     * @type {String}
+     */
+    template: '<h2>{{data.name}}</h2>'
+  },
+
 
   /**
-   * custom template to wrap cell content
-   * not $compiled
-   * @type {String}
+   * row odering
+   * key: name of the property in object for value to sort by
+   * reverse: sort reversal
+   *
+   * @type {Object}
    */
-  cellTemplate: '<div class="kissa">{{content}}</div>',
+  orderBy: {
+    key: 'name',
+    reverse: false
+  },
 
   /**
-   * row value filter
-   * @param  {[type]} content [description]
-   * @param  {[type]} row     [description]
-   * @return {[type]}         [description]
+   * columns to display
+   * @type {Array}
    */
-  filter: function(content, row) {
-    return content + '&nbsp;' + row.unit;
-  }  
-}
-```
-
-
-
-#### table row controls
-
-key | type | description
--- | -- | --
-left | array | list of control buttons at row start
-right | array | list of buttons at row end
-
-##### button object
-
-key | type | description
--- | -- | --
-icon | string | class name for i-element inside control item
-onclick | function | callback function when element is clicked
-
-```javascript
-{
-  "left": [
+  columns:[
     {
-      "icon": "ion-ios-search-strong",      
-      "onclick": (...args) => {
-        console.log('button callback', args);
+
+      /**
+       * object key to use as value
+       * @type {String}
+       */
+      key: 'name',
+
+      /**
+       * label for column
+       * @type {String}
+       */
+      label: 'Name',
+
+      /**
+       * classnames to add to the table cell
+       * @type {String}
+       */
+      classNames: 'col-lt-md-hide',
+
+      /**
+       * custom template to wrap cell content
+       * not $compiled
+       *
+       * {{content}} will be replaced with (filtered) cell content
+       * @type {String}
+       */
+      cellTemplate: '<div class="kissa">{{content}}</div>'
+    },
+
+    {
+      key: 'available',
+      label:'Available',
+      classNames: 'fit-content text-center',
+
+      /**
+       * cell content filter applied once
+       * when cell is rendered
+       *
+       * @param  {[type]} content content of current cell without filter
+       * @param  {[type]} row     row of current cell
+       * @return {[type]}         string to append into dom
+       */
+      filter: function(content, row) {
+        return content + '&nbsp;' + row.unit;
       }
-    }    
+    },
+    ...
   ],
-  "right": [
-    {
-      "icon": "ion-ios-search-strong",      
-      "onclick": (...args) => {
-        console.log('button callback', args);
+
+  /**
+   * row control buttons
+   * @type {Object}
+   */
+  controls: {
+
+    /**
+     * left side (before cells)
+     * @type {Array}
+     */
+    left: [
+      {
+
+        /**
+         * icon class to add to button
+         * @type {String}
+         */
+        icon: 'ion-ios-plus-outline',
+
+        /**
+         * callback to trigger when control is pressed
+         * @return {[type]} [description]
+         */
+        onclick: (...args) => {
+          console.log('button 1 on left', args);
+        }
+      },
+      {
+        icon: 'ion-ios-search-strong',
+        type: 'icon',
+        onclick: () => {
+          console.log('button 2 on left');
+        }
       }
-    }    
-  ]
+    ],
+
+    /**
+     * the other side (after the cells)
+     * @type {Array}
+     */
+    right: [
+      {
+        icon: 'ion-ios-email-outline',
+        onclick: () => {
+          console.log('button 3');
+        }
+      },
+      {
+        icon: 'ion-ios-email',
+        onclick: () => {
+          console.log('button 4');
+        }
+      },
+      {
+        icon: 'ion-ios-close-outline',
+        onclick: () => {
+          console.log('button 5');
+        }
+      }
+    ]
+  }
 }
 ```
 ---
