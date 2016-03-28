@@ -56,17 +56,18 @@ filter: this.options.filter
 ```HTML
   <h-data-table data="data" options="dataTableOptions" page="page"></h-data-table>
 ```
- variable | description
- --- | ---
- data | data provider, array of objects [{key: value}, {key: value} ..-]
- options | table options object
+
+variable | description
+--- | ---
+data | data provider, array of objects [{key: value}, {key: value} ..-]
+options | table options object
 page | page index currently displayed
 
 ### options
 
-horribly complex options to be provided for the table directive to correctly display the data and customize output.
+horribly complex options object to be provided for the table directive to correctly display the data and customize output.
 
-some of these are optional, other are not.
+only `columns` is required to be defined
 
 ```javascript
 dataTableOptions = {
@@ -199,7 +200,6 @@ dataTableOptions = {
       },
       {
         icon: 'ion-ios-search-strong',
-        type: 'icon',
         onclick: () => {
           console.log('button 2 on left');
         }
