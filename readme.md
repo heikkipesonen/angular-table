@@ -1,5 +1,8 @@
 # Data-displaying-table-thing
 
+![alt text](https://github.com/heikkipesonen/angular-table/raw/master/preview.png "data-table")
+
+
 a kind-of-simple angular directive for displaying data on responsive tables.
 
 this is intended to be primarily for displaying lists of data in simple and efficient way, and provide some sort of resposive design, even though using tables.
