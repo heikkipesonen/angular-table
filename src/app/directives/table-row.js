@@ -26,13 +26,13 @@ function renderTableRowControls(controls, trackingName){
  * @param  {[type]} classNames [description]
  * @return {[type]}            [description]
  */
-function renderTableRow(rowdata, columns, classNames){
-  return columns.map((column) => {
+function renderTableRow(rowdata, columns){
+  return columns.map((column, index) => {
     return `<td
         data-column-key="${column.key}"
         data-column-label="${column.label}"
-        class="h-table-cell h-data-table-data-cell ${classNames || ''}">
-        ${rowdata[column.key] || ''}
+        data-column-index="${index}"
+        class="h-table-cell h-data-table-data-cell ${column.classNames || ''}">
       </td>`
   }).join('');
 }
@@ -50,7 +50,6 @@ export function DataTableRowDirective(){
     },
     require: '^hDataTable',
     link: ($scope, $element, $attrs, dataTableController) => {
-
       // render table row contents as String
       // for faster update, $compile takes horrible amounts
       // of time and using the angular way of rendering hundreds
@@ -93,11 +92,19 @@ export function DataTableRowDirective(){
         });
       }
 
+      function getCellContent(columnIndex){
+        let column = dataTableController.options.columns[columnIndex];
+        let content = column.contentFilter ? column.filter($scope.row[column.key], $scope.row, column) : $scope.row[column.key];
+        return column.cellTemplate ? column.cellTemplate.replace('{{content}}', content) : content;
+      }
+
+
+
       // update whole row at once
       // update every cell content when something changed
       $scope.$watchCollection(() => $scope.row, () => {
         for (var i = 0; i < rowCells.length; i++){
-          rowCells[i].innerHTML = $scope.row[rowCells[i].getAttribute('data-column-key')];
+          rowCells[i].innerHTML = getCellContent(parseInt(rowCells[i].getAttribute('data-column-index')));
         }
       });
     }

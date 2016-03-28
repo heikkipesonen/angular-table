@@ -76,13 +76,32 @@ angular.module('hTable').controller('MainController', function ($scope) {
          * classnames to add to the table cell
          * @type {String}
          */
-        classNames: 'col-lt-md-hide'
+        classNames: 'col-lt-md-hide',
+
+        /**
+         * custom template to wrap cell content
+         * not $compiled
+         * @type {String}
+         */
+        cellTemplate: '<div class="perse">{{content}}</div>'
       },
 
       {
         key: 'available',
         label:'Available',
-        classNames: 'fit-content text-center'
+        classNames: 'fit-content text-center',
+
+        /**
+         * cell content filter applied once
+         * when cell is rendered
+         *
+         * @param  {[type]} content content of current cell without filter
+         * @param  {[type]} row     row of current cell
+         * @return {[type]}         string to append into dom
+         */
+        filter: function(content, row) {
+          return content + '&nbsp;' + row.unit;
+        }
       },
       {
         key: 'category',
