@@ -83,7 +83,7 @@ angular.module('hTable').controller('MainController', function ($scope) {
          * not $compiled
          * @type {String}
          */
-        cellTemplate: '<div class="perse">{{content}}</div>'
+        cellTemplate: '<div class="kissa">{{content}}</div>'
       },
 
       {
