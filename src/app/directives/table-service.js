@@ -3,6 +3,26 @@ export class DataTableService {
 
   }
 
+  orderBy(source, property, reverse){
+    source.sort((a,b) => {
+      let av = a[property].toString().trim().toLowerCase();
+      let bv = b[property].toString().trim().toLowerCase();
+
+      if (!!parseFloat(av) && !!parseFloat(bv)){
+          av = parseFloat(av);
+          bv = parseFloat(bv);
+      }
+
+      return av > bv ? 1 : av < bv ? -1 : 0;
+    });
+
+    if (reverse){
+      source.reverse();
+    }
+
+    return source;
+  }
+
   compareValues(item, filter) {
     item = (item + '').toLowerCase();
 

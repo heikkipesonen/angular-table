@@ -30,6 +30,7 @@ export class DataTableController {
      */
     $scope.$watch(()=>{
       return {
+        order: this.options.orderBy,
         data: this.data,
         paged: this.options.paged,
         itemsPerPage: this.options.itemsPerPage,
@@ -66,8 +67,39 @@ export class DataTableController {
     return this.options.paged ? this.rows.slice(page.start, page.start + parseInt(this.options.itemsPerPage)) : this.rows;
   }
 
+  /**
+   * toggle sorter when header cell is clicked
+   * @param  {[type]} column [description]
+   * @return {[type]}        [description]
+   */
+  toggleSort(column){
+    if (this.options.orderBy.key === column.key){
+      if (!this.options.orderBy.reverse){
+        this.options.orderBy.reverse = true;
+        return;
+      }
+
+      this.options.orderBy.key = null;
+      this.options.orderBy.reverse = false;
+      return;
+    }
+
+    this.options.orderBy.key = column.key;
+    this.options.orderBy.reverse = false;
+  }
+
+
+  /**
+   * update list view model
+   * @return {[type]} [description]
+   */
   update(){
     this.rows = this.DataTableService.filter(this.data, this.options.filter);
+
+    if (this.options.orderBy && this.options.orderBy.key){
+      this.DataTableService.orderBy(this.rows, this.options.orderBy.key, this.options.orderBy.reverse);
+    }
+
     if (this.options.paged){
       this.pages = this.DataTableService.buildPages(this.rows, this.options.itemsPerPage);
     } else {
@@ -137,9 +169,15 @@ export function DataTableDirective(){
           </th>
           <th
             ng-repeat="column in datatable.options.columns"
-            ng-click="datatable.tableHeaderClick(column)"
-            class="h-table-header-cell {{column.classNames || ''}}">
-            {{column.label}}
+            ng-click="datatable.toggleSort(column)"
+            class="h-table-header-cell {{column.classNames || ''}}"
+            ng-class="{
+              'h-sort-active' : datatable.options.orderBy.key === column.key,
+              'h-sort-reverse' : datatable.options.orderBy.key === column.key && datatable.options.orderBy.reverse
+            }">
+            <div class="h-header-content">
+              <span class="h-header-label">{{column.label}}</span>
+            </div>
           </th>
           <th
             ng-if="datatable.options.controls.right.length"
@@ -149,7 +187,10 @@ export function DataTableDirective(){
 
         <h-data-table-row-loader></h-data-table-row-loader>
 
-
+        <tr
+          h-data-table-filter-row options="datatable.options"
+          class="h-table-filter-row">
+        </tr>
 
         <tr
           h-table-row
@@ -158,6 +199,7 @@ export function DataTableDirective(){
           ng-click="datatable.showDetails($event, row)"
           ng-repeat="row in datatable.viewModel track by $index">
         </tr>
+
       </table>
 
       <h-table-page-select

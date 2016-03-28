@@ -31,7 +31,7 @@ function renderTableRow(rowdata, columns, classNames){
     return `<td
         data-column-key="${column.key}"
         data-column-label="${column.label}"
-        class="h-table-cell ${classNames || ''}">
+        class="h-table-cell h-data-table-data-cell ${classNames || ''}">
         ${rowdata[column.key] || ''}
       </td>`
   }).join('');
@@ -61,8 +61,8 @@ export function DataTableRowDirective(){
 
       let rowClassName = dataTableController.viewModel.indexOf($scope.row) % 2 > 0 ? 'h-table-row-odd' : 'h-table-row-even';
       let rowElement = renderTableRow($scope.row, dataTableController.options.columns);
-      let leftControls = renderTableRowControls(dataTableController.options.controls.left, 'left');
-      let rightControls = renderTableRowControls(dataTableController.options.controls.right, 'right');
+      let leftControls = dataTableController.options.controls && dataTableController.options.controls.left ? renderTableRowControls(dataTableController.options.controls.left, 'left') : '';
+      let rightControls = dataTableController.options.controls && dataTableController.options.controls.right ? renderTableRowControls(dataTableController.options.controls.right, 'right') : '';
 
       $element[0].classList.add(rowClassName);
       $element[0].innerHTML = leftControls + rowElement + rightControls;
@@ -98,7 +98,6 @@ export function DataTableRowDirective(){
       $scope.$watchCollection(() => $scope.row, () => {
         for (var i = 0; i < rowCells.length; i++){
           rowCells[i].innerHTML = $scope.row[rowCells[i].getAttribute('data-column-key')];
-
         }
       });
     }

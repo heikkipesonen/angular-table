@@ -59,12 +59,25 @@ html, body{
 }
 
 .demo-container{
+	margin: 50px 0;
   text-align: center;
 
 	h1{
     font-size: 30pt;
     font-weight: 100;
-    margin: 50px auto;
+    padding: 50px;
+		display: inline-block;
+		background-color: rgb(130, 151, 172);
+		color: white;
+
+		span{
+			font-size: 8pt;
+			vertical-align: top;
+		}
+
+		span:last-child{
+			vertical-align: bottom;
+		}
   }
 
   div{
@@ -84,9 +97,6 @@ h1,h2,h3,h4,h5, th{
 	font-weight: 600;
 }
 
-h1{
-  color: rgb(38, 92, 255);
-}
 /* Do not remove the comments below. It's the markers used by gulp-inject to inject
    all your sass files automatically */
 // injector

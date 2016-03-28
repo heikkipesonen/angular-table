@@ -42,6 +42,11 @@ angular.module('hTable').controller('MainController', function ($scope) {
       template: '<h2>{{data.name}}</h2>'
     },
 
+    orderBy: {
+      key: 'name',
+      reverse: false
+    },
+
     /**
      * columns to display
      * @type {Array}
@@ -80,16 +85,6 @@ angular.module('hTable').controller('MainController', function ($scope) {
       {
         key: 'package_size',
         label: 'Size',
-        /**
-         * value filter
-         * manipulate model value for display
-         * @param  {[type]} value value of column key
-         * @param  {Object} row original row
-         * @return {[type]}       [description]
-         */
-        valueFilter: (value, row) => {
-          return value + row.unit;
-        }
       },
       {
         key: 'unit',
@@ -99,17 +94,7 @@ angular.module('hTable').controller('MainController', function ($scope) {
       {
         key: 'package_price',
         label: 'Price',
-        classNames: 'fit-content text-center',
-
-        /**
-         * value filter
-         * manipulate model value for display
-         * @param  {[type]} value [description]
-         * @return {[type]}       [description]
-         */
-        valueFilter: (value) => {
-          return (value + '').replace('.',',');
-        }
+        classNames: 'fit-content text-center'
       }
     ],
 
@@ -133,24 +118,18 @@ angular.module('hTable').controller('MainController', function ($scope) {
           icon: 'ion-ios-plus-outline',
 
           /**
-           * tbd
-           * @type {String}
-           */
-          type: 'icon',
-
-          /**
            * callback to trigger when control is pressed
            * @return {[type]} [description]
            */
-          onclick: () => {
-            console.log('fukSatan');
+          onclick: (...args) => {
+            console.log('button 1 on left', args);
           }
         },
         {
           icon: 'ion-ios-search-strong',
           type: 'icon',
           onclick: () => {
-            console.log('fukSatan');
+            console.log('button 2 on left');
           }
         }
       ],
@@ -161,17 +140,21 @@ angular.module('hTable').controller('MainController', function ($scope) {
        */
       right: [
         {
-          icon: 'ion-ios-plus-outline',
-          type: 'icon',
+          icon: 'ion-ios-email-outline',
           onclick: () => {
-            console.log('fukSatan');
+            console.log('button 3');
           }
         },
         {
-          icon: 'ion-ios-search-strong',
-          type: 'icon',
+          icon: 'ion-ios-email',
           onclick: () => {
-            console.log('fukSatan');
+            console.log('button 4');
+          }
+        },
+        {
+          icon: 'ion-ios-close-outline',
+          onclick: () => {
+            console.log('button 5');
           }
         }
       ]
