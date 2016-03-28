@@ -1,24 +1,30 @@
 # Data-displaying-table-thing
 
-a kind-of-simple angular directive for displaying data on responsive tables. Currently features complex configuration object to provide many useless features. as usual.
+a kind-of-simple angular directive for displaying data on responsive tables.
 
-this directive aims to aid only on displaying the data, not hc-data analysis or cosmic search algorithms, you can build them yourself if you wish.
+this is intended to be primarily for displaying lists of data in simple and efficient way, and provide some sort of resposive design, even though using tables.
 
-this directive is still under preliminary development so it should not be used by anyone except extremely masochistic persons.
+this is still under preliminary development so it should not be used by anyone except extremely masochistic persons.
+
+
+# installation
+
+not currently, need to create a build....
 
 ---
 
 ## Features not desired by anyone
 
-- changing column order should mess up the whole table
-- updating columns when table is rendered, should also mess up the whole table
-
+actions that result everything exploding
+- changing column order
+- updating columns when table is rendered
+..maybe
 
 ## Features
 
 - works almost like angular directive should,
-  - manipulate data somewhere, display with this
-  - should update automatically
+  - manipulate data somewhere, display with this directive
+  - should update automatically  
 - relatively fast render, with hundreds of rows at once
 - only few watches per row, regardless of cell count
 - pagination
@@ -31,7 +37,7 @@ this directive is still under preliminary development so it should not be used b
 - all data paging, filtering and sorting in one service
 
 
-currenly watches changes on:
+currently watches changes on (ie. things that can be changed when live):
 ```javascript
 page: pagenumber
 order: this.options.orderBy,
@@ -54,15 +60,24 @@ filter: this.options.filter
 
 ## Usage
 ```HTML
-  <h-data-table data="data" options="dataTableOptions" page="page"></h-data-table>
+  <h-data-table data="data" options="options" page="pageNumber"></h-data-table>
 ```
 
-variable | description
---- | ---
-data | data provider, array of objects [{key: value}, {key: value} ..-]
-options | table options object
-page | page index currently displayed
-
+```javascript
+data = [
+  {
+    key: 'value',
+    key: 'value',
+    key: 'value',
+  },
+  {
+    key: 'value',
+    key: 'value',
+    key: 'value',
+  }
+  ...
+]
+```
 ### options
 
 horribly complex options object to be provided for the table directive to correctly display the data and customize output.
@@ -234,6 +249,5 @@ dataTableOptions = {
 }
 ```
 ---
-
 # License
 MIT
