@@ -32,7 +32,7 @@ function renderTableRow(rowdata, columns){
         data-column-key="${column.key}"
         data-column-label="${column.label}"
         data-column-index="${index}"
-        class="h-table-cell h-data-table-data-cell ${column.classNames || ''}">
+        class="h-table-cell h-data-table-data-cell ${column.classNames || ''}">
       </td>`
   }).join('');
 }

@@ -36,7 +36,7 @@ export class DataTableService {
   }
 
   filter(rows = [], filterModel = {}){
-    let filterFields = Object.keys(filterModel || {});
+    let filterFields = Object.keys(filterModel || {});
 
     return rows.filter((item) => {
         return filterFields.every((field) => {

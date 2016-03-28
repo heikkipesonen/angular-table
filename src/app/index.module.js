@@ -1,6 +1,5 @@
 
 import {DataTableDirective} from './directives/table';
-import {DataTableHeaderRowDirective} from './directives/table-header';
 import {DataTableFilterRowDirective} from './directives/table-header';
 import {DataTableService} from './directives/table-service';
 import {DataTableRowDirective} from './directives/table-row';

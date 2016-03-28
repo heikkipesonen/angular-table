@@ -10,8 +10,8 @@ $table-page-button-size: 32px !default;
 $table-header-height: 50px !default;
 $table-header-border: $table-border-color !default;
 $table-row-stripe: #f7f7f7 !default;
-$table-loading-gradient-start: #1a5bec !default;
-$table-loading-gradient-end: lighten($table-loading-gradient-start, 30) !default;
+$table-loading-gradient-start: $table-theme-color !default;
+$table-loading-gradient-end: transparent !default;
 
 $table-breakpoint: 767px !default;
 $table-overlay-color: rgba(0,0,0,0.3) !default;
@@ -160,22 +160,27 @@ $table-details-height: 300px !default;
     background-color: $table-row-stripe;
   }
 
-  tr.h-data-table-loader{
+  tr[h-data-table-row-loader]{
     border: none;
+
+    &[loading="true"] .h-data-table-loader{
+      height: 8px;
+      display: table-cell;
+    }
   }
 
-  tr.h-data-table-loader td{
+  td.h-data-table-loader{
     padding: 0;
-    height: 0px;
     border: none !important;
+    height: 0;
     display: none;
-
-    background: -webkit-linear-gradient(left , $table-loading-gradient-start 30%, $table-loading-gradient-end 80%, $table-loading-gradient-start 100%) repeat;
+    background: -webkit-linear-gradient(left , $table-loading-gradient-start 0%, $table-loading-gradient-end 50%, $table-loading-gradient-start 100%) repeat;
     background-size: 200% 100%;
     animation-name: moving-gradient;
     animation-duration: 1s;
     animation-iteration-count: infinite;
     animation-timing-function: linear;
+
     @keyframes moving-gradient {
        0% {
            background-position: 0% 0;
@@ -185,6 +190,8 @@ $table-details-height: 300px !default;
            background-position: 200% 0;
        }
     }
+
+
    }
 }
 

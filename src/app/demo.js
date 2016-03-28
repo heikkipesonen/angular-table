@@ -1,20 +1,22 @@
-import data from './directives/data';
 
 
-angular.module('hTable').controller('MainController', function ($scope) {
+angular.module('hTable').controller('MainController', function ($scope, $http) {
   'ngInject';
   /**
    * table row data
    * @type {Array}
    */
+  //
+  // $scope.$watch('filterText', () => {
+  //   $scope.data = data.filter((item) => {
+  //     return $scope.filterText ? item.name.indexOf($scope.filterText) > -1 : true;
+  //   });
+  // });
 
-  $scope.$watch('filterText', () => {
-    $scope.data = data.filter((item) => {
-      return $scope.filterText ? item.name.indexOf($scope.filterText) > -1 : true;
-    });
+  $scope.data = $http.get('data.json').then((response) => {
+    return response.data;
   });
 
-  $scope.data = data;
   $scope.table = {
 
     /**
@@ -109,7 +111,7 @@ angular.module('hTable').controller('MainController', function ($scope) {
       },
       {
         key: 'package_size',
-        label: 'Size',
+        label: 'Size'
       },
       {
         key: 'unit',

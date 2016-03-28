@@ -23,15 +23,14 @@ export class DataTableController {
 
 
     /**
-     * watch data and options change
+     * watch options change
      * trigger full update when changed
      * @param  {[type]} ( [description]
      * @return {[type]}   [description]
      */
-    $scope.$watchCollection(()=>{
+    $scope.$watch(()=>{
       return {
         order: this.options.orderBy,
-        data: this.data,
         paged: this.options.paged,
         itemsPerPage: this.options.itemsPerPage,
         columns: this.options.columns,
@@ -39,8 +38,17 @@ export class DataTableController {
       };
     }, () => {
       this.update();
-    });
+    }, true);
 
+
+    /**
+     * watch data update
+     * @param  {[type]} ( [description]
+     * @return {[type]}   [description]
+     */
+    $scope.$watch(()=>{
+      return this.data;
+    }, () => this.update());
   }
 
   /**
@@ -63,7 +71,7 @@ export class DataTableController {
    * @return {[type]} [description]
    */
   getPage(){
-    let page = this.pages[this.page] || {start: 0};
+    let page = this.pages[this.page] || {start: 0};
     return this.options.paged ? this.rows.slice(page.start, page.start + parseInt(this.options.itemsPerPage)) : this.rows;
   }
 
@@ -94,6 +102,17 @@ export class DataTableController {
    * @return {[type]} [description]
    */
   update(){
+    if (this.data.then){
+      this.loading = true;
+      this.data.then((data) => {
+        this.data = data;
+      }).finally(()=>{
+        this.loading= false;
+      });
+
+      return;
+    }
+
     this.rows = this.DataTableService.filter(this.data, this.options.filter);
 
     if (this.options.orderBy && this.options.orderBy.key){
@@ -110,7 +129,7 @@ export class DataTableController {
       }];
     }
 
-    this.setPage(this.page || 0);
+    this.setPage(this.page || 0);
   }
 
   /**
@@ -170,7 +189,7 @@ export function DataTableDirective(){
           <th
             ng-repeat="column in datatable.options.columns"
             ng-click="datatable.toggleSort(column)"
-            class="h-table-header-cell {{column.classNames || ''}}"
+            class="h-table-header-cell {{column.classNames || ''}}"
             ng-class="{
               'h-sort-active' : datatable.options.orderBy.key === column.key,
               'h-sort-reverse' : datatable.options.orderBy.key === column.key && datatable.options.orderBy.reverse
@@ -185,7 +204,7 @@ export function DataTableDirective(){
           </th>
         </tr>
 
-        <h-data-table-row-loader></h-data-table-row-loader>
+        <tr h-data-table-row-loader loading="{{datatable.loading}}"></tr>
 
         <tr
           ng-if="datatable.options.rowFilter"

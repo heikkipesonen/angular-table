@@ -1,4 +1,4 @@
-export default [
+[
   {
     "name": "laborum qui",
     "description": "Laborum excepteur esse esse tempor aliquip. Magna elit nulla consequat eu exercitation nisi laboris tempor ipsum. Laboris ex cillum proident qui et cupidatat deserunt esse ullamco. Mollit ullamco mollit eu amet velit labore aliqua aute exercitation cillum ut. Laborum ullamco nisi nisi qui laborum. Deserunt ex cillum proident velit dolor nulla irure in fugiat occaecat elit esse cupidatat laboris. Minim reprehenderit veniam aute duis laborum proident consectetur.\r\n",
@@ -8999,4 +8999,4 @@ export default [
     "package_price": 44.32,
     "category": "Kerma/ creme"
   }
-];
+]
