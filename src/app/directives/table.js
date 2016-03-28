@@ -28,7 +28,7 @@ export class DataTableController {
      * @param  {[type]} ( [description]
      * @return {[type]}   [description]
      */
-    $scope.$watch(()=>{
+    $scope.$watchCollection(()=>{
       return {
         order: this.options.orderBy,
         data: this.data,
@@ -39,7 +39,7 @@ export class DataTableController {
       };
     }, () => {
       this.update();
-    }, true);
+    });
 
   }
 
